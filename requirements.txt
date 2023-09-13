@@ -1,0 +1,4 @@
+numpy
+pytesseract
+pygetwindow
+pyautogui
