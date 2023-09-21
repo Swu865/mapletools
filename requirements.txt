@@ -2,3 +2,4 @@ numpy
 pytesseract
 pygetwindow
 pyautogui
+customtkinter
