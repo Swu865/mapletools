@@ -39,8 +39,6 @@ def image_processing():
     text = pytesseract.image_to_string(gray)
     text = text.replace(",", "").replace(".", "")
 # Print the OCR 
-
-
     OCR_result = text.split("\n")
     while "" in OCR_result:
         OCR_result.remove("")
@@ -48,24 +46,42 @@ def image_processing():
     print(OCR_result)
     return OCR_result
 
-def IsThreeLine(OCR_result,potential,lines:int,True3:bool):
+def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool):
     count = 0
-    for i, potential_line in enumerate(OCR_result):
-        if potential  in potential_line or "All Stats" in potential_line:
-            count += 1
-            print(f'{potential} is {count}') 
+    for potential_line in OCR_result:
+        
+        # If potential is one of STR, DEX, INT, or LUK
+        if potential in ["STR", "DEX", "INT", "LUK"]:
+            
+            if True3:
+                # Extra condition for True3
+                if potential in potential_line and "All Stats: 6%" not in potential_line and "All Stats: 7%" not in potential_line:
+                    count += 1
+            else:
+                if potential in potential_line or "All Stats" in potential_line:
+                    count += 1
+                    
+        # If potential is ATT
+        elif potential == "ATT":
+            if potential in potential_line and not potential_line.startswith("MATT:"):
+                count += 1
+                
+        # All other cases
+        else:
+            if potential in potential_line:
+                count += 1
 
-    return count == lines
+    return count >= lines
 
 
 
 
-def main(potential, stop_event=None):
+def main(potential, lines: int, True3: bool, stop_event=None):
     output_lines = ''
     line_count = 0
     found = False
-    desire_potential = potential
-
+    
+    
     while True:
         if stop_event and stop_event.is_set():
             break
@@ -73,7 +89,7 @@ def main(potential, stop_event=None):
         time.sleep(1)
         locate_potentail_redcube()
         OCR_result = image_processing()
-        found = IsThreeLine(OCR_result, desire_potential)
+        found = has_expected_potential_lines(OCR_result, potential,lines,True3)
     
         if not found:
             pyautogui.click()
