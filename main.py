@@ -1,5 +1,4 @@
 import tkinter as tk
-import customtkinter as ctk
 from tools.autocubing import main as autocubing_main
 import threading
 
@@ -26,23 +25,35 @@ def stop_autocubing():
     autocubing_thread.join()  
     autocubing_button.configure(text="Start", command=autocubing_toggle)
 
+# press F12 to start auto cubing
+def on_press_f12(event):
+    autocubing_toggle()
 
-root = ctk.CTk()
+root = tk.Tk()
 root.title("MapleTools")
 root.geometry("1000x800")
 
-label = ctk.CTkLabel(root, text="Auto Cubing")
-label.pack(pady=20)
+# label
+label = tk.Label(root, text="Auto Cubing")
+label.grid(row=0, column=0)
 
-potential_var = ctk.StringVar(value="Select potential")
-
-potential_options = ["STR", "DEX", "INT", "LUK"]
+# select drop down
+potential_var = tk.StringVar(value="Select potential")
+potential_options = ["STR", "DEX", "INT", "LUK","ATT","MATT","Item Drop Rate","Mesos Obtained"]
 option_menu = tk.OptionMenu(root, potential_var, *potential_options)
-option_menu.pack(pady=20)
+option_menu.grid(row=1, column=0)
 
-autocubing_button = ctk.CTkButton(root, text="Start", command=autocubing_toggle)
-autocubing_button.pack(pady=20)
+# number input box
+desire_line_number = tk.Entry()
+desire_line_number.grid(row=1,column=1)
 
+# check box
+
+Check_True3 = tk.Checkbutton(root, text='True 3 ', onvalue=True, offvalue=False)
+Check_True3.grid(row=1,column=2)
+# submit button
+autocubing_button = tk.Button(root, text="Start", command=autocubing_toggle)
+autocubing_button.grid(row=1, column=3)
+
+root.bind("<F12>", on_press_f12)
 root.mainloop()
-
-

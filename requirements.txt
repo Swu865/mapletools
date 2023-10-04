@@ -2,4 +2,4 @@ numpy
 pytesseract
 pygetwindow
 pyautogui
-customtkinter
+opencv-python

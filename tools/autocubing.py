@@ -41,35 +41,39 @@ def image_processing():
 # Print the OCR 
 
 
-    test_list = text.split("\n")
-    while "" in test_list:
-        test_list.remove("")
+    OCR_result = text.split("\n")
+    while "" in OCR_result:
+        OCR_result.remove("")
     
-    print(test_list)
-    return test_list
+    print(OCR_result)
+    return OCR_result
 
-def IsThreeLine(test_list,potential):
+def IsThreeLine(OCR_result,potential,lines:int,True3:bool):
     count = 0
-    for i, potential_line in enumerate(test_list):
+    for i, potential_line in enumerate(OCR_result):
         if potential  in potential_line or "All Stats" in potential_line:
             count += 1
             print(f'{potential} is {count}') 
 
-    return count == 3
+    return count == lines
+
+
+
 
 def main(potential, stop_event=None):
     output_lines = ''
     line_count = 0
     found = False
-    
+    desire_potential = potential
+
     while True:
         if stop_event and stop_event.is_set():
             break
         
         time.sleep(1)
         locate_potentail_redcube()
-        test_list = image_processing()
-        found = IsThreeLine(test_list, potential)
+        OCR_result = image_processing()
+        found = IsThreeLine(OCR_result, desire_potential)
     
         if not found:
             pyautogui.click()
