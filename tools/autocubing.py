@@ -63,9 +63,12 @@ def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool)
                     
         # If potential is ATT
         elif potential == "ATT":
-            if potential in potential_line and not potential_line.startswith("MATT:"):
+            if potential in potential_line and (not potential_line.startswith("Magic ATT:") and not potential_line.startswith("ATT: +32")):
                 count += 1
-                
+        
+        elif potential == "Magic ATT:":
+            if potential in potential_line and not potential_line.startswith("Magic ATT: +32") :
+                count += 1
         # All other cases
         else:
             if potential in potential_line:
