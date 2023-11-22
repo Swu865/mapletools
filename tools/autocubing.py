@@ -10,7 +10,7 @@ import threading
 # screen shot the rectangle part we need
 
 
-def locate_potentail_redcube():
+def locate_potentail_redcube_red():
     try:
         window = gw.getWindowsWithTitle('MapleStory')[0]
     except IndexError:
@@ -25,6 +25,22 @@ def locate_potentail_redcube():
     screenshot = pyautogui.screenshot(region=(x1, y1,rect_width, rect_height))
     screenshot.save('screenshot.png')
 
+
+#TODO, locate the black cube windows position
+def locate_potentail_redcube_black():
+    try:
+        window = gw.getWindowsWithTitle('MapleStory')[0]
+    except IndexError:
+        print("MapleStory not found")
+        exit()
+
+    x,y,width,height =window.left,window.top,window.width,window.height
+    x1 = x + width//2 - 84
+    y1 = y + height//2 + 57
+    rect_width = 168
+    rect_height = 43
+    screenshot = pyautogui.screenshot(region=(x1, y1,rect_width, rect_height))
+    screenshot.save('screenshot.png')
 
 def image_processing():
     image =cv2.imread('screenshot.png')
@@ -43,43 +59,39 @@ def image_processing():
     while "" in OCR_result:
         OCR_result.remove("")
     
-    print(OCR_result)
+
     return OCR_result
 
-def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool):
+def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool, above_160: bool):
     count = 0
+    temp_sum = 0
+
     for potential_line in OCR_result:
-        
-        # If potential is one of STR, DEX, INT, or LUK
-        if potential in ["STR", "DEX", "INT", "LUK"]:
-            
+        if potential in ["STR", "DEX", "INT", "LUK"] and (potential in potential_line or "All Stats" in potential_line):
             if True3:
-                # Extra condition for True3
-                if potential in potential_line and "All Stats: 6%" not in potential_line and "All Stats: 7%" not in potential_line:
-                    count += 1
+                value = int(''.join(filter(str.isdigit, potential_line)))
+                if above_160 and value in [13, 10, 7] or not above_160 and value in [12, 9, 6]:
+                    temp_sum += value
             else:
-                if potential in potential_line or "All Stats" in potential_line:
-                    count += 1
-                    
-        # If potential is ATT
-        elif potential == "ATT":
-            if potential in potential_line and (not potential_line.startswith("Magic ATT:") and not potential_line.startswith("ATT: +32")):
                 count += 1
+        elif potential == "ATT" and potential in potential_line and not potential_line.startswith("Magic ATT:") and not potential_line.startswith("ATT: +32"):
+            count += 1
         
-        elif potential == "Magic ATT:":
-            if potential in potential_line and not potential_line.startswith("Magic ATT: +32") :
-                count += 1
-        # All other cases
-        else:
-            if potential in potential_line:
-                count += 1
+        elif potential == "Magic ATT:" and potential in potential_line and not potential_line.startswith("Magic ATT: +32"):
+            count += 1
+        #for meso, drop rate etc...
+        elif potential not in ["STR", "DEX", "INT", "LUK", "ATT", "Magic ATT:"] and potential in potential_line:
+            count += 1
 
-    return count >= lines
+    if True3:
+        return temp_sum >= (33 if above_160 else 30)
+    else:
+        return count >= lines
 
 
 
 
-def main(potential, lines: int, True3: bool, stop_event=None):
+def main(cube_type: str,potential, lines: int, True3: bool,above_160: bool, stop_event=None):
     output_lines = ''
     line_count = 0
     found = False
@@ -90,9 +102,12 @@ def main(potential, lines: int, True3: bool, stop_event=None):
             break
         
         time.sleep(1)
-        locate_potentail_redcube()
+        if 'Red' in cube_type:
+            locate_potentail_redcube_red()
+        else:
+            locate_potentail_redcube_black()
         OCR_result = image_processing()
-        found = has_expected_potential_lines(OCR_result, potential,lines,True3)
+        found = has_expected_potential_lines(OCR_result, potential,lines,True3,above_160)
     
         if not found:
             pyautogui.click()

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk  # ttk provides access to the Tk themed widget set
+from tkinter import ttk  
 from tools.autocubing import main as autocubing_main
 import threading
 from pynput import keyboard
@@ -15,13 +15,15 @@ def autocubing_toggle():
 def start_autocubing():
     global autocubing_thread
     global stop_event
+    selected_cube = cube_var().get()
     selected_potential = potential_var.get()
     input_lines = radio_var.get()
-    check_box_select = check_True_var.get()
+    True3_box_select = check_True_var.get()
+    Above160_box_select = check_Above160_var.get()
 
     stop_event = threading.Event()
     stop_event.clear()
-    autocubing_thread = threading.Thread(target=autocubing_main, args=(selected_potential, input_lines,check_box_select,stop_event))
+    autocubing_thread = threading.Thread(target=autocubing_main, args=(selected_cube,selected_potential, input_lines, True3_box_select, Above160_box_select, stop_event))
     autocubing_thread.start()
 
 def stop_autocubing():
@@ -50,17 +52,26 @@ label.grid(row=0, column=0, pady=10, columnspan=3,padx=(100,0))
 
 
 
-# select drop down
+#select cube drop down
+cube_var = tk.StringVar(value="Select cube")
+cube_options = ["select Cube ","Black","Red"]
+cube_menu = ttk.OptionMenu(main_frame, cube_var, *cube_options)
+cube_menu.grid(row=1, column=0, padx=(10,100))
+
+
+# select potential drop down
 potential_var = tk.StringVar(value="Select potential")
-potential_options = ["select potential","STR", "DEX", "INT", "LUK", "ATT", "Magic ATT:", "Item Drop Rate", "Mesos Obtained"]
+potential_options = ["select potential","STR", "DEX", "INT", "LUK", "ATT", "Magic ATT", "Item Drop Rate", "Mesos Obtained"]
 option_menu = ttk.OptionMenu(main_frame, potential_var, *potential_options)
-option_menu.grid(row=1, column=0, padx=(10,100))
+option_menu.grid(row=2, column=0, padx=(10,100))
 
 def update_checkbox_state(*args):
-    if potential_var.get() in ["STR", "DEX", "INT", "LUK"] and radio_var.get() == 3:
+    if potential_var.get() in ["STR", "DEX", "INT", "LUK","ATT", "Magic ATT"] and radio_var.get() == 3:
         Check_True3["state"] = tk.NORMAL
+        Check_Above160["state"] = tk.NORMAL
     else:
         Check_True3["state"] = tk.DISABLED
+        Check_Above160["state"] = tk.DISABLED
 potential_var.trace_add("write", update_checkbox_state)
 
 # radio button group
@@ -79,7 +90,9 @@ check_True_var = tk.BooleanVar()
 Check_True3 = ttk.Checkbutton(main_frame, text='True 3 ',variable= check_True_var, onvalue=True, offvalue=False)
 Check_True3.grid(row=1,column=2, padx=(20,5))
 
-
+check_Above160_var = tk.BooleanVar()
+Check_Above160 = ttk.Checkbutton(main_frame, text='Above 160 ',variable= check_Above160_var, onvalue=True, offvalue=False)
+Check_Above160.grid(row=2,column=2, padx=(10,5))
 
 # submit button
 autocubing_button = ttk.Button(main_frame, text="Start", command=autocubing_toggle)
