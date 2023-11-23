@@ -62,11 +62,12 @@ def image_processing():
 
     return OCR_result
 
-def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool, above_160: bool):
+def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool, above_160: bool,legendary : str):
     count = 0
     temp_sum = 0
-
+    leng_sum = 0
     for potential_line in OCR_result:
+        
         if potential in ["STR", "DEX", "INT", "LUK"] and (potential in potential_line or "All Stats" in potential_line):
             if True3:
                 value = int(''.join(filter(str.isdigit, potential_line)))
@@ -74,11 +75,16 @@ def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool,
                     temp_sum += value
             else:
                 count += 1
-        elif potential == "ATT" and potential in potential_line and not potential_line.startswith("Magic ATT:") and not potential_line.startswith("ATT: +32"):
+        elif potential == "ATT" and (potential in potential_line or "Boss" in potential_line) and (not potential_line.startswith("Magic ATT:")) and (not potential_line.startswith("ATT: +32")):
+            
+        
             count += 1
         
-        elif potential == "Magic ATT:" and potential in potential_line and not potential_line.startswith("Magic ATT: +32"):
+        elif potential == "Magic ATT:" and (potential in potential_line or "Boss" in potential_line) and not potential_line.startswith("Magic ATT: +32"):
+
             count += 1
+        
+
         #for meso, drop rate etc...
         elif potential not in ["STR", "DEX", "INT", "LUK", "ATT", "Magic ATT:"] and potential in potential_line:
             count += 1
@@ -87,7 +93,6 @@ def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool,
         return temp_sum >= (33 if above_160 else 30)
     else:
         return count >= lines
-
 
 
 
