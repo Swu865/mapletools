@@ -15,7 +15,7 @@ def autocubing_toggle():
 def start_autocubing():
     global autocubing_thread
     global stop_event
-    selected_cube = cube_var().get()
+    selected_cube = cube_var.get()
     selected_potential = potential_var.get()
     input_lines = radio_var.get()
     True3_box_select = check_True_var.get()

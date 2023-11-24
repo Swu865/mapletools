@@ -62,7 +62,7 @@ def image_processing():
 
     return OCR_result
 
-def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool, above_160: bool,legendary : str):
+def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool, above_160: bool):
     count = 0
     temp_sum = 0
     leng_sum = 0
@@ -88,7 +88,7 @@ def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool,
         #for meso, drop rate etc...
         elif potential not in ["STR", "DEX", "INT", "LUK", "ATT", "Magic ATT:"] and potential in potential_line:
             count += 1
-
+    print(count,OCR_result)
     if True3:
         return temp_sum >= (33 if above_160 else 30)
     else:
