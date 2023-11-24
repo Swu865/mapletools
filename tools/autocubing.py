@@ -69,10 +69,11 @@ def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool,
     for potential_line in OCR_result:
         
         if potential in ["STR", "DEX", "INT", "LUK"] and (potential in potential_line or "All Stats" in potential_line):
-            if True3:
+            if True3 :
                 value = int(''.join(filter(str.isdigit, potential_line)))
-                if above_160 and value in [13, 10, 7] or not above_160 and value in [12, 9, 6]:
-                    temp_sum += value
+                
+                temp_sum += value
+
             else:
                 count += 1
         elif potential == "ATT" and (potential in potential_line or "Boss" in potential_line) and (not potential_line.startswith("Magic ATT:")) and (not potential_line.startswith("ATT: +32")):
@@ -88,10 +89,13 @@ def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool,
         #for meso, drop rate etc...
         elif potential not in ["STR", "DEX", "INT", "LUK", "ATT", "Magic ATT:"] and potential in potential_line:
             count += 1
-    print(count,OCR_result)
+    
+    
     if True3:
+        print('Stats sum:',temp_sum,OCR_result)
         return temp_sum >= (33 if above_160 else 30)
     else:
+        print('count',count,OCR_result)
         return count >= lines
 
 
