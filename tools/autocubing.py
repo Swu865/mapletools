@@ -16,7 +16,6 @@ def locate_potentail_redcube_red():
     except IndexError:
         print("MapleStory not found")
         exit()
-
     x,y,width,height =window.left,window.top,window.width,window.height
     x1 = x + width//2 - 84
     y1 = y + height//2 + 57
@@ -26,14 +25,12 @@ def locate_potentail_redcube_red():
     screenshot.save('screenshot.png')
 
 
-#TODO, locate the black cube windows position
 def locate_potentail_redcube_black():
     try:
         window = gw.getWindowsWithTitle('MapleStory')[0]
     except IndexError:
         print("MapleStory not found")
         exit()
-
     x,y,width,height =window.left,window.top,window.width,window.height
     x1 = x + width//2 - 84
     y1 = y + height//2 + 57+49
@@ -44,22 +41,14 @@ def locate_potentail_redcube_black():
 
 def image_processing():
     image =cv2.imread('screenshot.png')
-# Enlarge the image by a factor of 4 (for example)
     scale_factor = 4
     enlarged_image = cv2.resize(image, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
-    
-# Convert the enlarged image to grayscale
     gray = cv2.cvtColor(enlarged_image, cv2.COLOR_BGR2GRAY)
-    
-# Perform OCR on the image
     text = pytesseract.image_to_string(gray)
     text = text.replace(",", "").replace(".", "")
-# Print the OCR 
     OCR_result = text.split("\n")
     while "" in OCR_result:
         OCR_result.remove("")
-    
-
     return OCR_result
 
 def has_expected_potential_lines(OCR_result, potential, lines: int, True3: bool, above_160: bool):
