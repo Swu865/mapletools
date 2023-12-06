@@ -1,0 +1,29 @@
+MapleTools/
+│
+├── autocubing/                  # Directory for autocubing-related modules
+│   ├── __init__.py              # Makes autocubing a Python package
+│   ├── main.py                  # Main autocubing functionality
+│   └── ...                      # Other autocubing related scripts
+│
+├── gui/                         # Directory for all GUI related code
+│   ├── __init__.py              # Makes gui a Python package
+│   ├── main_window.py           # Code for the main window
+│   └── components/              # Sub-package for GUI components
+│       ├── __init__.py          # Makes components a Python package
+│       ├── cube_selector.py     # Cube selection component
+│       ├── potential_selector.py# Potential selection component
+│       └── ...                  # Other GUI components
+│
+├── utils/                       # Utility scripts and helper functions
+│   ├── __init__.py              # Makes utils a Python package
+│   └── ...                      # Utility scripts
+│
+├── resources/                   # Static files like images, configs, etc.
+│   └── ...                      # Resource files
+│
+├── tests/                       # Unit tests and test data
+│   ├── __init__.py              # Makes tests a Python package
+│   └── ...                      # Test scripts
+│
+├── main.py                      # Entry point to the application
+└── requirements.txt             # Python dependencies for the project
