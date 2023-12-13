@@ -1,1 +1,1 @@
-from autocubing.ItemCategory.stats import For_Stats
+from .stats import For_Stats

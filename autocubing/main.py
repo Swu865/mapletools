@@ -1,6 +1,6 @@
 import time
 import pyautogui
-from autocubing.utils import WindowCapture, Cube_image_reco
+from utils import WindowCapture, Cube_image_reco
 from autocubing.ItemCategory import For_Stats
 
 class AutoCubing:
@@ -34,7 +34,7 @@ class AutoCubing:
 def create_condition_callable(desired_stats,cube_type):
     if cube_type == 'red':
         WindowCapture("Windows Powershell").locate_potential_RedCube()
-    else:
+    elif cube_type == 'black':
         WindowCapture("MapleStory").locate_potential_BlackCube()
     def condition():
         

@@ -1,0 +1,6 @@
+WeaponAndSecondary:{'MATT':0,'ATT':0,'Boss Damage':0}
+Emblem:{'MATT':0,'ATT':0,'IED':0}
+Hat:{'Skill':'','STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
+Gloves:{'Critical Damage':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
+Accessory:{'Drop':'','Meso':'','STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
+Others:{'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
