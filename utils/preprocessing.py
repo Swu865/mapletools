@@ -46,27 +46,32 @@ class Cube_image_reco:
             OCR_result.remove("")
         return OCR_result
 
+
 class DataPreprocessing:
     def __init__(self, file_path):
         self.file_path = file_path
         self.stats_list = [] 
         self.item_name_list = []
         self.item_dict_list = []
-
+        self.list_of_keys = []
     def parse(self):
-        pattern = r"(\w+):(\{'.+?\})"
-        with open(self.file_path, 'r') as file:
-            for line in file:
-                match = re.match(pattern, line.strip())
-                if match:
-                    category = match.group(1)
-                    dict_str = match.group(2)                    
-                    dict_obj = ast.literal_eval(dict_str)
-                    self.stats_list.append([category, dict_obj])
-        for i in range(len(self.stats_list)):
-            self.item_name_list.append(self.stats_list[i][0])
-            self.item_dict_list.append(self.stats_list[i][1])
-    
+        if not self.stats_list:  # Check if it's already been parsed
+            pattern = r"(\w+):(\{'.+?\})"
+            with open(self.file_path, 'r') as file:
+                for line in file:
+                    match = re.match(pattern, line.strip())
+                    if match:
+                        category = match.group(1)
+                        dict_str = match.group(2)                    
+                        dict_obj = ast.literal_eval(dict_str)
+                        self.stats_list.append([category, dict_obj])
+
+            # Only populate these lists if they're empty
+            if not self.item_name_list and not self.item_dict_list:
+                for category, stats in self.stats_list:
+                    self.item_name_list.append(category)
+                    self.item_dict_list.append(stats)
+
     def get_item_name_list(self):
         self.parse()
         return self.item_name_list
@@ -74,3 +79,33 @@ class DataPreprocessing:
     def get_item_dict_list(self):
         self.parse()
         return self.item_dict_list
+
+    def get_stats_for_category(self, category):
+        
+        for name, stats in self.stats_list:
+            if name == category:
+                return list(stats.keys())
+    
+    def set_item_dict_value(self, item_cate: str, key: str, value: int):
+        self.parse()  # Make sure the data is parsed and lists are populated
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            self.item_dict_list[i][key] = value
+        else:
+            print(item_cate)
+            print(f"The item category '{item_cate}' is not a valid selection.")
+
+    def get_item_dict_value(self, item_cate: str, key: str, value: int):
+          # Make sure the data is parsed and lists are populated
+        self.parse()  # Make sure the data is parsed and lists are populated
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            return self.item_dict_list[i] 
+        else:
+            print(item_cate)
+            print(f"The item category '{item_cate}' is not a valid selection.")
+            
+
+    
+    
+

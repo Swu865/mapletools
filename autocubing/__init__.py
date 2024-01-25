@@ -1,1 +1,1 @@
-from autocubing.main import AutoCubing,create_condition_callable
+from .main import AutoCubing,create_condition_callable
