@@ -9,7 +9,7 @@ from gui.widgets import CustomButton,CustomScrolledText,CustomLabel
 def main():
 
     stop_event = threading.Event()
-
+    test = []
     # Function to handle F12 press or stop button click
     def handle_stop():
         stop_event.set()  # Signal the event to stop the AutoCubing process
@@ -17,7 +17,11 @@ def main():
 
     def run_autocubing():
         # Toggle running state
-        condition = create_condition_callable(desired_stats.get(), select_cube.get())
+        
+        
+
+
+        condition = create_condition_callable(test, select_cube.get())
         autocubing_instance = AutoCubing(stop_event=stop_event, condition_callable=condition)  # Create an instance
         if not stop_event.is_set():
             # Start the AutoCubing process in a separate thread
@@ -70,10 +74,12 @@ def main():
         
         if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
             item_category_Data_process.set_item_dict_value(selected_item, selected_stat, int(number))
-            display_str = f"Desired Stats: {item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))}"
+            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
+            test.append(display_str)
             display_windows.clear_text()
-            display_windows.insert_text(display_str)
+            display_windows.insert_text(str(display_str))
         else:
+            display_windows.clear_text()
             display_windows.insert_text("Please make a valid selection and enter a number.\n")
 
     

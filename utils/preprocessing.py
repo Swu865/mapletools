@@ -25,10 +25,10 @@ class WindowCapture:
         screenshot.save(filename)
     
     def locate_potential_RedCube(self):
-        return self.take_screenshot(84, 57, 163, 43, 'screenshot.png')
+        return self.take_screenshot(84, 57, 163, 43, 'screenshot1.png')
 
     def locate_potential_BlackCube(self):
-        return self.take_screenshot(84, 57+49, 163, 43, 'screenshot.png')
+        return self.take_screenshot(84, 57+49, 163, 43, 'screenshot1.png')
 
 
 class Cube_image_reco:
@@ -100,7 +100,7 @@ class DataPreprocessing:
         self.parse()  # Make sure the data is parsed and lists are populated
         if item_cate in self.item_name_list:
             i = self.item_name_list.index(item_cate)
-            return self.item_dict_list[i] 
+            return dict(self.item_dict_list[i] )
         else:
             print(item_cate)
             print(f"The item category '{item_cate}' is not a valid selection.")

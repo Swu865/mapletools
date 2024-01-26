@@ -1,5 +1,6 @@
 import time
 import pyautogui
+import re
 from utils import WindowCapture, Cube_image_reco
 
 
@@ -49,7 +50,10 @@ class For_Stats():
         return Stats_dict
 
     def check_stat(self, OCR_stats: dict[str, int]) -> bool:
+        print("OCR_stats",OCR_stats)
         for desired_stats in self.DESIRED_stats:  # Iterate through each DESIRED_stats dict
+            print("desired_stats",desired_stats)
+            
             if all(OCR_stats.get(stat_name, 0) >= stat_threshold for stat_name, stat_threshold in desired_stats.items()):
                 return True  # Return True if any DESIRED_stats is fully met
         return False  # Return False if none of the DESIRED_stats are met
@@ -62,19 +66,19 @@ class For_Stats():
 
 def create_condition_callable(desired_stats,cube_type):
     if cube_type == 'red':
-        print("red")
+        
         WindowCapture("Windows Powershell").locate_potential_RedCube()
     elif cube_type == 'black':
-        print("re2d")
+        
         WindowCapture("MapleStory").locate_potential_BlackCube()
     def condition():
         
         OCR_result = Cube_image_reco.main() 
-        print("re2d")
+        print(desired_stats)
         return For_Stats(OCR_result, desired_stats).main()
     return condition
 
 
-a = create_condition_callable("ATT","red")
-b = AutoCubing(None,a)
-b.main()
+
+
+
