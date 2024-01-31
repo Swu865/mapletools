@@ -105,7 +105,13 @@ class DataPreprocessing:
             print(item_cate)
             print(f"The item category '{item_cate}' is not a valid selection.")
             
-
     
+    def clear_dict_value(self,item_cate: str,key: str):
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            self.item_dict_list[i][key] = 0
+        
     
+    def clear_dict(self):
+        self.item_dict_list.clear()
 

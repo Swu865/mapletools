@@ -1,10 +1,13 @@
 import threading
 import tkinter as tk
+from tkinter import ttk, scrolledtext
 from tkinter import ttk,scrolledtext
 from autocubing.main import AutoCubing,create_condition_callable
 from utils import DataPreprocessing
 from gui.components import SelectCube,SelectItem 
 from gui.widgets import CustomButton,CustomScrolledText,CustomLabel
+
+
 
 def main():
 
@@ -17,10 +20,6 @@ def main():
 
     def run_autocubing():
         # Toggle running state
-        
-        
-
-
         condition = create_condition_callable(test, select_cube.get())
         autocubing_instance = AutoCubing(stop_event=stop_event, condition_callable=condition)  # Create an instance
         if not stop_event.is_set():
@@ -39,6 +38,35 @@ def main():
         stats = item_category_Data_process.get_stats_for_category(selected_category)
         # Update the stats dropdown
         desired_stats.update_options(stats)
+
+    def set_input_stats_value():
+        selected_item = item_cate.get()
+        selected_stat = desired_stats.get()
+        number = desired_number_entry.get()
+        
+        if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
+            item_category_Data_process.set_item_dict_value(selected_item, selected_stat, int(number))
+            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
+
+            set_display_windows.clear_text()
+            set_display_windows.insert_text(str(display_str))
+        else:
+            set_display_windows.clear_text()
+            set_display_windows.insert_text("Please make a valid selection and enter a number.\n")
+    def add_input_stats_value():
+        selected_item = item_cate.get()
+        selected_stat = desired_stats.get()
+        number = desired_number_entry.get()
+        
+        if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
+            
+            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
+            test.append(display_str)
+            item_category_Data_process.clear_dict_value(selected_item,selected_stat)
+            display_windows.insert_text(str(display_str))
+        else:
+            display_windows.clear_text()
+            display_windows.insert_text("Please make a valid selection and enter a number.\n")
 
 
     root = tk.Tk()
@@ -61,42 +89,41 @@ def main():
     desired_stats = SelectItem(root, "select desire stats", [])
     desired_stats.pack(fill='x', padx=10, pady=5)
 
-    #entry box
-    extry_box_label = CustomLabel(root,"Enter your desired stats")
-    extry_box_label.pack(fill='x', padx=10, pady=5)
-    desired_number_entry = tk.Entry(root)
-    desired_number_entry.pack(fill='x', padx=10, pady=5)
+    entry_box_frame = ttk.Frame(root)
+    entry_box_frame.pack(fill='x', padx=10, pady=5)
 
-    def add_input_stats_value():
-        selected_item = item_cate.get()
-        selected_stat = desired_stats.get()
-        number = desired_number_entry.get()
-        
-        if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
-            item_category_Data_process.set_item_dict_value(selected_item, selected_stat, int(number))
-            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
-            test.append(display_str)
-            display_windows.clear_text()
-            display_windows.insert_text(str(display_str))
-        else:
-            display_windows.clear_text()
-            display_windows.insert_text("Please make a valid selection and enter a number.\n")
+    # Label
+    extry_box_label = CustomLabel(entry_box_frame, "Enter your stats value (integer only)")
+    extry_box_label.pack(side='left', padx=(0, 10))
 
-    
-    add_button = CustomButton(root,"Add",add_input_stats_value)
-    add_button.pack()
-    
+    # Entry Box
+    desired_number_entry = tk.Entry(entry_box_frame)
+    desired_number_entry.pack(side='left', padx=(0, 10))
+
+
+
+
     # Set up the dropdown update trace
     item_cate.options.option_var.trace('w', update_stats_dropdown)
 
+    display_window_frame = ttk.Frame(root)
+    display_window_frame.pack(fill='x', padx=10, pady=5)
     #show your disired text
-    display_windows = CustomScrolledText(root,height=10, width=50)
-    display_windows.pack(fill='x', padx=10, pady=5)
+    set_display_windows = CustomScrolledText(display_window_frame,height=10, width=50)
+    set_display_windows.pack(side='left', padx=(0, 10))
 
+    display_windows = CustomScrolledText(display_window_frame,height=10, width=50)
+    display_windows.pack(side='right', padx=(0, 10))
 
+    # set button
+    display_window_button_frame = ttk.Frame(root)
+    display_window_button_frame.pack(fill='x', padx=10, pady=5)
+    set_button = CustomButton(display_window_button_frame,"Set",set_input_stats_value)
+    set_button.pack(side='left', padx=(0, 10))
 
-
-
+    # add button
+    add_button = CustomButton(display_window_button_frame,"Add",add_input_stats_value)
+    add_button.pack(side='right', padx=(0, 10))
     #run button
     
     run_button = CustomButton(root, "Run", run_autocubing)
@@ -109,3 +136,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
