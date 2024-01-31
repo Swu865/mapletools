@@ -1,35 +1,67 @@
 import threading
 import tkinter as tk
 from tkinter import ttk, scrolledtext
-from tkinter import ttk,scrolledtext
+from pynput import keyboard 
 from autocubing.main import AutoCubing,create_condition_callable
 from utils import DataPreprocessing
 from gui.components import SelectCube,SelectItem 
 from gui.widgets import CustomButton,CustomScrolledText,CustomLabel
 
 
+stop_event = None  # Declare as a global variable
+autocubing_thread = None  # Declare as a global variable
 
 def main():
+    global stop_event, autocubing_thread  # Declare that we will use global variables in this function
+    desired_stats_list = []
+    
+    def start_autocubing():
+        global stop_event, autocubing_thread
+        stop_event = threading.Event()
+        stop_event.clear()
+        condition = create_condition_callable(desired_stats_list, select_cube.get())
+        
+        autocubing_instance = AutoCubing(stop_event, condition)
+        
+        stop_event = threading.Event()
+        stop_event.clear()
+        autocubing_thread = threading.Thread(target=autocubing_instance.main)  # Removed the parentheses here
+        autocubing_thread.start()
 
-    stop_event = threading.Event()
-    test = []
-    # Function to handle F12 press or stop button click
-    def handle_stop():
-        stop_event.set()  # Signal the event to stop the AutoCubing process
-        print("Stopping...")  # Update this as needed, e.g., update a label in the GUI
+    def stop_autocubing():
+        global stop_event, autocubing_thread
+        if stop_event:
+            stop_event.set()
+        
+        autocubing_thread.join()
 
-    def run_autocubing():
-        # Toggle running state
-        condition = create_condition_callable(test, select_cube.get())
-        autocubing_instance = AutoCubing(stop_event=stop_event, condition_callable=condition)  # Create an instance
-        if not stop_event.is_set():
-            # Start the AutoCubing process in a separate thread
-            autocubing_thread = threading.Thread(target=autocubing_instance.main)  # Pass the instance's main method
-            autocubing_thread.start()
-            run_button.config(text="Stop", command=handle_stop)
+
+
+        if autocubing_thread.is_alive():
+            print("Autocubing thread did not stop in time")
         else:
-            handle_stop()
-            run_button.config(text="Run", command=run_autocubing)
+            run_button.configure(text="Start", command=autocubing_toggle)
+
+
+
+    def autocubing_toggle():
+        if "Start" in run_button.get_button_text():
+            start_autocubing()
+            run_button.button.configure(text="Stop", command=stop_autocubing)
+        else:
+            stop_autocubing()
+            
+
+
+            
+    # Keyboard listener setup
+
+    def on_press(key):
+        if key == keyboard.Key.f12:
+            root.after(0, autocubing_toggle) 
+
+
+
 
     def update_stats_dropdown(*args):
         # Get the selected item category
@@ -61,7 +93,7 @@ def main():
         if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
             
             display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
-            test.append(display_str)
+            desired_stats_list.append(display_str)
             item_category_Data_process.clear_dict_value(selected_item,selected_stat)
             display_windows.insert_text(str(display_str))
         else:
@@ -126,11 +158,13 @@ def main():
     add_button.pack(side='right', padx=(0, 10))
     #run button
     
-    run_button = CustomButton(root, "Run", run_autocubing)
+    run_button = CustomButton(root, "Start", start_autocubing)
     run_button.pack()
 
     # Bind the F12 key to the handle_stop function
-    root.bind('<F12>', lambda event: handle_stop())
+    
+    listener = keyboard.Listener(on_press=on_press)
+    listener.start()
 
     root.mainloop()
 

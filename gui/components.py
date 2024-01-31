@@ -15,9 +15,15 @@ class SelectCube(ttk.Frame):
         self.radio_buttons.grid(row=0, column=1)
 
     def get(self):
-        return self.radio_buttons.get_value()
-
-    
+        
+        index = self.radio_buttons.get_value()
+        
+        if index == 1:
+            return "Red"
+        elif index == 2:
+            return "Black"
+        else:
+            return "Unknown"  # 或者处理未选中的情况
 
 class SelectItem(ttk.Frame):
     def __init__(self, parent, text: str, options: list):

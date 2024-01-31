@@ -25,10 +25,10 @@ class WindowCapture:
         screenshot.save(filename)
     
     def locate_potential_RedCube(self):
-        return self.take_screenshot(84, 57, 163, 43, 'screenshot1.png')
+        return self.take_screenshot(84, 57, 163, 43, 'screenshot.png')
 
     def locate_potential_BlackCube(self):
-        return self.take_screenshot(84, 57+49, 163, 43, 'screenshot1.png')
+        return self.take_screenshot(84, 57+49, 163, 43, 'screenshot.png')
 
 
 class Cube_image_reco:

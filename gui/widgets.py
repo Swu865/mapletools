@@ -59,6 +59,10 @@ class CustomButton(ttk.Frame):
         super().__init__(parent)
         self.button = ttk.Button(self, text=text, command=command)
         self.button.grid(row=0, column=0, pady=10, padx=(100, 0))
+    def get_button_text(self):
+        return self.button.cget("text")
+
+        
 
 class CustomLabel(ttk.Frame):
     def __init__(self, parent, text="", **kwargs):

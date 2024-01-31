@@ -12,19 +12,22 @@ class AutoCubing:
 
     def check_condition(self):
         if self.condition_callable is not None:
+            window_capture = WindowCapture("MapleStory")
+            window_capture.locate_potential_RedCube()
             self.found = self.condition_callable()
-    def stop(self):
-        if self.stop_event is not None:
-            self.stop_event.set()
+            
+
 
     def main(self):
         while True:
-            if self.stop_event and self.stop_event.is_set():
+            if self.stop_event.is_set():
                 break
             self.check_condition()
+            
             if not self.found:
-                print("not found")
                 pyautogui.click()
+                time.sleep(0.050)
+                pyautogui.press('enter')
                 time.sleep(0.050)
                 pyautogui.press('enter')
                 time.sleep(0.050)
@@ -34,20 +37,21 @@ class AutoCubing:
                 print("found")
                 break
 
+            time.sleep(2)  
 
-def create_condition_callable(desired_stats:dict[str,int],cube_type:str):
-    if cube_type == 'red':
-        
-        WindowCapture("Windows Powershell").locate_potential_RedCube()
-    elif cube_type == 'black':
-        
-        WindowCapture("MapleStory").locate_potential_BlackCube()
+def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
+    window_capture = WindowCapture("MapleStory")
+    print('cube_type',cube_type)
     def condition():
+        # Trigger screenshot
+        if cube_type == 'red':
+            window_capture.locate_potential_RedCube()
+        elif cube_type == 'black':
+            window_capture.locate_potential_BlackCube()
         
-        '''OCR_result = Cube_image_reco.main()'''
-        OCR_result = ['ATT: +13%', 'ATT: +10%', 'Boss Damage: +35%']
-        print(desired_stats)
+        OCR_result = Cube_image_reco.main()
         return For_Stats(OCR_result, desired_stats).main()
+    
     return condition
 
 class For_Stats():
@@ -70,7 +74,7 @@ class For_Stats():
 
 
     def check_stat(self, OCR_stats: dict[str, int]) -> bool:
-        print("OCR_stats", OCR_stats)
+        
         applicable_stats = {"STR", "INT", "DEX", "LUK","All Stats"}  # Stats that can benefit from 'All Stats'
 
         for desired_stats in self.DESIRED_stats:
