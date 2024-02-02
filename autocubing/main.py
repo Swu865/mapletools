@@ -12,18 +12,16 @@ class AutoCubing:
 
     def check_condition(self):
         if self.condition_callable is not None:
-            window_capture = WindowCapture("MapleStory")
+            window_capture = WindowCapture("Windows PowerShell")
             window_capture.locate_potential_RedCube()
             self.found = self.condition_callable()
             
 
 
     def main(self):
-        while True:
-            if self.stop_event.is_set():
-                break
+        while not self.stop_event.is_set():
+            print("Loop running, stop_event is set:", self.stop_event.is_set())
             self.check_condition()
-            
             if not self.found:
                 pyautogui.click()
                 time.sleep(0.050)
@@ -40,8 +38,8 @@ class AutoCubing:
             time.sleep(2)  
 
 def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
-    window_capture = WindowCapture("MapleStory")
-    print('cube_type',cube_type)
+    window_capture = WindowCapture("Windows PowerShell")
+    
     def condition():
         # Trigger screenshot
         if cube_type == 'red':

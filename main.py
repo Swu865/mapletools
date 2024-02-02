@@ -8,8 +8,6 @@ from gui.components import SelectCube,SelectItem
 from gui.widgets import CustomButton,CustomScrolledText,CustomLabel
 
 
-stop_event = None  # Declare as a global variable
-autocubing_thread = None  # Declare as a global variable
 
 def main():
     global stop_event, autocubing_thread  # Declare that we will use global variables in this function
@@ -17,14 +15,11 @@ def main():
     
     def start_autocubing():
         global stop_event, autocubing_thread
-        stop_event = threading.Event()
-        stop_event.clear()
         condition = create_condition_callable(desired_stats_list, select_cube.get())
-        
-        autocubing_instance = AutoCubing(stop_event, condition)
-        
+
         stop_event = threading.Event()
         stop_event.clear()
+        autocubing_instance = AutoCubing(stop_event, condition)
         autocubing_thread = threading.Thread(target=autocubing_instance.main)  # Removed the parentheses here
         autocubing_thread.start()
 
@@ -32,36 +27,28 @@ def main():
         global stop_event, autocubing_thread
         if stop_event:
             stop_event.set()
-        
         autocubing_thread.join()
 
-
-
-        if autocubing_thread.is_alive():
-            print("Autocubing thread did not stop in time")
-        else:
-            run_button.configure(text="Start", command=autocubing_toggle)
-
-
+        run_button.configure(text="Start", command=autocubing_toggle)
 
     def autocubing_toggle():
-        if "Start" in run_button.get_button_text():
+        
+        if run_button.cget("text") == "Start":
+            run_button.configure(text="Stop", command=stop_autocubing)
             start_autocubing()
-            run_button.button.configure(text="Stop", command=stop_autocubing)
-        else:
+        elif run_button.cget("text") == "Stop":
+            run_button.configure(text="Start", command=autocubing_toggle)
             stop_autocubing()
-            
-
-
             
     # Keyboard listener setup
 
     def on_press(key):
         if key == keyboard.Key.f12:
-            root.after(0, autocubing_toggle) 
+            autocubing_toggle()
+            
 
-
-
+    def clear_stats():
+        pass
 
     def update_stats_dropdown(*args):
         # Get the selected item category
@@ -132,9 +119,6 @@ def main():
     desired_number_entry = tk.Entry(entry_box_frame)
     desired_number_entry.pack(side='left', padx=(0, 10))
 
-
-
-
     # Set up the dropdown update trace
     item_cate.options.option_var.trace('w', update_stats_dropdown)
 
@@ -157,12 +141,14 @@ def main():
     add_button = CustomButton(display_window_button_frame,"Add",add_input_stats_value)
     add_button.pack(side='right', padx=(0, 10))
     #run button
-    
-    run_button = CustomButton(root, "Start", start_autocubing)
-    run_button.pack()
+    run_button = ttk.Button(root, text="Start", command=autocubing_toggle)
+    run_button.pack(side='right', padx=(0, 10))
 
-    # Bind the F12 key to the handle_stop function
-    
+    #clear button
+    clear_button = ttk.Button(root, text="Clear", command=clear_stats)
+    clear_button.pack(side='left', padx=(0, 10))
+
+    # keyboard listener,bind f12 to run button
     listener = keyboard.Listener(on_press=on_press)
     listener.start()
 
