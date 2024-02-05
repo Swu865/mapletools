@@ -52,24 +52,33 @@ def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
     
     return condition
 
-class For_Stats():
+class For_Stats:
     def __init__(self, OCR_stats: list[str], DESIRED_stats: list[dict[str, int]]):
         self.OCR_stats = OCR_stats
-        self.DESIRED_stats = DESIRED_stats  # Now a list of dictionaries
+        self.DESIRED_stats = DESIRED_stats
 
     def parse_OCR_result(self) -> dict[str, int]:
         Stats_dict = {}
         str_pattern = r"([a-zA-Z\s]+): \+(\d+)%"
-        print(self.OCR_stats)
+        str_pattern_boss = r"([a-zA-Z\s]+): \+(\d+)"
+
+        print("OCR stats list", self.OCR_stats)
+
         for stat in self.OCR_stats:
-            match = re.match(str_pattern, stat)
+            # Determine which pattern to use
+            if "Boss" in stat:
+                match = re.match(str_pattern_boss, stat)
+            else:
+                match = re.match(str_pattern, stat)
+
             if match:
                 stat_name = match.group(1).strip()  # Strip to remove any leading/trailing spaces
                 stat_value = int(match.group(2))
                 Stats_dict[stat_name] = Stats_dict.get(stat_name, 0) + stat_value
 
+        print("Stats_dict", Stats_dict)
         return Stats_dict
-
+ 
 
     def check_stat(self, OCR_stats: dict[str, int]) -> bool:
         

@@ -1,6 +1,6 @@
 import threading
 import tkinter as tk
-from tkinter import ttk, scrolledtext
+from tkinter import ttk, scrolledtext,messagebox
 from pynput import keyboard 
 from autocubing.main import AutoCubing,create_condition_callable
 from utils import DataPreprocessing
@@ -32,8 +32,11 @@ def main():
         run_button.configure(text="Start", command=autocubing_toggle)
 
     def autocubing_toggle():
+        if not desired_stats_list:
+            messagebox.showwarning("Warning", "Please add at least one stat value before starting.")
         
-        if run_button.cget("text") == "Start":
+        elif run_button.cget("text") == "Start" :
+
             run_button.configure(text="Stop", command=stop_autocubing)
             start_autocubing()
         elif run_button.cget("text") == "Stop":
@@ -46,10 +49,6 @@ def main():
         if key == keyboard.Key.f12:
             autocubing_toggle()
             
-
-    def clear_stats():
-        pass
-
     def update_stats_dropdown(*args):
         # Get the selected item category
         selected_category = item_cate.get()
@@ -57,6 +56,13 @@ def main():
         stats = item_category_Data_process.get_stats_for_category(selected_category)
         # Update the stats dropdown
         desired_stats.update_options(stats)
+
+    
+    def clear_stats():
+        desired_stats_list.clear()
+        item_category_Data_process.clear_dict()
+        set_display_windows.clear_text()
+        display_windows.clear_text()
 
     def set_input_stats_value():
         selected_item = item_cate.get()
@@ -88,6 +94,7 @@ def main():
             display_windows.insert_text("Please make a valid selection and enter a number.\n")
 
 
+
     root = tk.Tk()
     root.title("AutoCubing")
     root.geometry("800x600")
@@ -112,12 +119,13 @@ def main():
     entry_box_frame.pack(fill='x', padx=10, pady=5)
 
     # Label
-    extry_box_label = CustomLabel(entry_box_frame, "Enter your stats value (integer only)")
+    extry_box_label = CustomLabel(entry_box_frame, "Enter your stats value (For boss damage: 3 for 30%,35. 4 for 40%)")
     extry_box_label.pack(side='left', padx=(0, 10))
 
     # Entry Box
     desired_number_entry = tk.Entry(entry_box_frame)
     desired_number_entry.pack(side='left', padx=(0, 10))
+
 
     # Set up the dropdown update trace
     item_cate.options.option_var.trace('w', update_stats_dropdown)
