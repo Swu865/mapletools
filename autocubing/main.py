@@ -12,7 +12,7 @@ class AutoCubing:
 
     def check_condition(self):
         if self.condition_callable is not None:
-            window_capture = WindowCapture("Windows PowerShell")
+            window_capture = WindowCapture("MapleStory")
             window_capture.locate_potential_RedCube()
             self.found = self.condition_callable()
             
@@ -38,7 +38,7 @@ class AutoCubing:
             time.sleep(2)  
 
 def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
-    window_capture = WindowCapture("Windows PowerShell")
+    window_capture = WindowCapture("MapleStory")
     
     def condition():
         # Trigger screenshot

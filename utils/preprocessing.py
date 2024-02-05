@@ -35,7 +35,7 @@ class Cube_image_reco:
     def __init__(self):
         pass
     def main():
-        image =cv2.imread('screenshot1.png')
+        image =cv2.imread('screenshot.png')
         scale_factor = 4
         enlarged_image = cv2.resize(image, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
         gray = cv2.cvtColor(enlarged_image, cv2.COLOR_BGR2GRAY)
