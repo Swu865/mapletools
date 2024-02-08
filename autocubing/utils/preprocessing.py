@@ -3,6 +3,7 @@ import pygetwindow as gw
 import pytesseract
 import cv2
 import re
+import ast
 
 class WindowCapture:
     def __init__(self, window_title):
@@ -45,30 +46,76 @@ class Cube_image_reco:
             OCR_result.remove("")
         return OCR_result
 
-class For_Stats():
-    def __init__(self, OCR_stats: list[str], DESIRED_stats: list[dict[str, int]]):
-        self.OCR_stats = OCR_stats
-        self.DESIRED_stats = DESIRED_stats  # Now a list of dictionaries
 
-    def parse_OCR_result(self) -> dict[str, int]:
-        Stats_dict = {}
-        str_pattern = r"([a-zA-Z\s]+): \+(\d+)%"
-        for stat in self.OCR_stats:
-            match = re.match(str_pattern, stat)
-            if match:
-                stat_name = match.group(1).strip()  # Strip to remove any leading/trailing spaces
-                stat_value = int(match.group(2))
-                Stats_dict[stat_name] = Stats_dict.get(stat_name, 0) + stat_value
+class DataPreprocessing:
+    def __init__(self, file_path):
+        self.file_path = file_path
+        self.stats_list = [] 
+        self.item_name_list = []
+        self.item_dict_list = []
+        self.list_of_keys = []
+    def parse(self):
+        if not self.stats_list:  # Check if it's already been parsed
+            pattern = r"(\w+):(\{'.+?\})"
+            with open(self.file_path, 'r') as file:
+                for line in file:
+                    match = re.match(pattern, line.strip())
+                    if match:
+                        category = match.group(1)
+                        dict_str = match.group(2)                    
+                        dict_obj = ast.literal_eval(dict_str)
+                        self.stats_list.append([category, dict_obj])
 
-        return Stats_dict
+            # Only populate these lists if they're empty
+            if not self.item_name_list and not self.item_dict_list:
+                for category, stats in self.stats_list:
+                    self.item_name_list.append(category)
+                    self.item_dict_list.append(stats)
 
-    def check_stat(self, OCR_stats: dict[str, int]) -> bool:
-        for desired_stats in self.DESIRED_stats:  # Iterate through each DESIRED_stats dict
-            if all(OCR_stats.get(stat_name, 0) >= stat_threshold for stat_name, stat_threshold in desired_stats.items()):
-                return True  # Return True if any DESIRED_stats is fully met
-        return False  # Return False if none of the DESIRED_stats are met
+    def get_item_name_list(self):
+        self.parse()
+        return self.item_name_list
+    
+    def get_item_dict_list(self):
+        self.parse()
+        return self.item_dict_list
 
-    def main(self) -> bool:
-        OCR_dict = self.parse_OCR_result()
-        match_desired_stats = self.check_stat(OCR_dict)
-        return match_desired_stats
+    def get_stats_for_category(self, category):
+        
+        for name, stats in self.stats_list:
+            if name == category:
+                return list(stats.keys())
+    
+    def set_item_dict_value(self, item_cate: str, key: str, value: int):
+        self.parse()  # Make sure the data is parsed and lists are populated
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            self.item_dict_list[i][key] = value
+        else:
+            print(item_cate)
+            print(f"The item category '{item_cate}' is not a valid selection.")
+
+    def get_item_dict_value(self, item_cate: str, key: str, value: int):
+          # Make sure the data is parsed and lists are populated
+        self.parse()  # Make sure the data is parsed and lists are populated
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            return dict(self.item_dict_list[i] )
+        else:
+            print(item_cate)
+            print(f"The item category '{item_cate}' is not a valid selection.")
+            
+    
+    def clear_dict_value(self,item_cate: str,key: str):
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            self.item_dict_list[i][key] = 0
+        
+    
+    def clear_dict(self):
+        self.item_dict_list.clear()
+        self.stats_list.clear()
+        self.item_name_list.clear()
+
+        self.list_of_keys.clear()
+
