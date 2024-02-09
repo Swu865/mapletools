@@ -12,8 +12,7 @@ class AutoCubing:
 
     def check_condition(self):
         if self.condition_callable is not None:
-            window_capture = WindowCapture("MapleStory")
-            window_capture.locate_potential_RedCube()
+
             self.found = self.condition_callable()
             
 
@@ -42,9 +41,9 @@ def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
     
     def condition():
         # Trigger screenshot
-        if cube_type == 'red':
+        if cube_type == 'Red':
             window_capture.locate_potential_RedCube()
-        elif cube_type == 'black':
+        elif cube_type == 'Black':
             window_capture.locate_potential_BlackCube()
         
         OCR_result = Cube_image_reco.main()

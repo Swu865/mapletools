@@ -22,8 +22,7 @@ class SelectCube(ttk.Frame):
             return "Red"
         elif index == 2:
             return "Black"
-        else:
-            return "Unknown"  # 或者处理未选中的情况
+
 
 class SelectItem(ttk.Frame):
     def __init__(self, parent, text: str, options: list):
