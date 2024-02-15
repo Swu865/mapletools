@@ -91,10 +91,12 @@ class DataPreprocessing:
         if item_cate in self.item_name_list:
             i = self.item_name_list.index(item_cate)
             self.item_dict_list[i][key] = value
+            self.list_of_keys.append(key)
         else:
             print(item_cate)
             print(f"The item category '{item_cate}' is not a valid selection.")
 
+    ## might be use in future
     def get_item_dict_value(self, item_cate: str, key: str, value: int):
           # Make sure the data is parsed and lists are populated
         self.parse()  # Make sure the data is parsed and lists are populated
@@ -104,12 +106,25 @@ class DataPreprocessing:
         else:
             print(item_cate)
             print(f"The item category '{item_cate}' is not a valid selection.")
-            
     
+    def display_desired_stat_value(self, item_cate: str, key: str, value: int):
+        self.parse()  
+        result = ""
+        if item_cate in self.item_name_list:
+            i = self.item_name_list.index(item_cate)
+            stat_dict = dict(self.item_dict_list[i] )
+            for key,value in stat_dict.items():
+                if value != 0:
+                    result += str(key)+": "+str(value)+" "
+        return result
+
+
     def clear_dict_value(self,item_cate: str,key: str):
         if item_cate in self.item_name_list:
             i = self.item_name_list.index(item_cate)
-            self.item_dict_list[i][key] = 0
+            for j in self.list_of_keys:
+                self.item_dict_list[i][j] = 0
+        self.list_of_keys.clear()
         
     
     def clear_dict(self):
@@ -118,4 +133,5 @@ class DataPreprocessing:
         self.item_name_list.clear()
 
         self.list_of_keys.clear()
+
 

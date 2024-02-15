@@ -1,6 +1,6 @@
 WeaponAndSecondary:{'MATT':0,'ATT':0,'Boss Monster Damage':0}
 Emblem:{'MATT':0,'ATT':0,'ignore Monster DEF':0}
-Hat:{'Skill':'','STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
+Hat:{'Skill Cooldown':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
 Gloves:{'Critical Damage':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
-Accessory:{'item Drop Rate':0,'Mesos Obtained':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
+Accessory:{'Item Drop Rate':0,'Mesos Obtained':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
 Others:{'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}

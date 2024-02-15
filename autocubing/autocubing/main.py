@@ -15,8 +15,6 @@ class AutoCubing:
 
             self.found = self.condition_callable()
             
-
-
     def main(self):
         while not self.stop_event.is_set():
             print("Loop running, stop_event is set:", self.stop_event.is_set())
@@ -36,20 +34,6 @@ class AutoCubing:
 
             time.sleep(2)  
 
-def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
-    window_capture = WindowCapture("MapleStory")
-    
-    def condition():
-        # Trigger screenshot
-        if cube_type == 'Red':
-            window_capture.locate_potential_RedCube()
-        elif cube_type == 'Black':
-            window_capture.locate_potential_BlackCube()
-        
-        OCR_result = Cube_image_reco.main()
-        return For_Stats(OCR_result, desired_stats).main()
-    
-    return condition
 
 class For_Stats:
     def __init__(self, OCR_stats: list[str], DESIRED_stats: list[dict[str, int]]):
@@ -58,8 +42,9 @@ class For_Stats:
 
     def parse_OCR_result(self) -> dict[str, int]:
         Stats_dict = {}
-        str_pattern = r"([a-zA-Z\s]+): \+(\d+)%"
-        str_pattern_boss = r"([a-zA-Z\s]+): \+(\d+)"
+        str_pattern = r"([a-zA-Z\s]+): \+(\d+)%"               # match common stats end with %
+        str_pattern_boss = r"([a-zA-Z\s]+): \+(\d+)"           #match boss damage
+        str_pattern_cd = r"([a-zA-Z\s]+): \-(\d)"              #match skill cooldown
 
         print("OCR stats list", self.OCR_stats)
 
@@ -67,6 +52,8 @@ class For_Stats:
             # Determine which pattern to use
             if "Boss" in stat:
                 match = re.match(str_pattern_boss, stat)
+            elif "Skill" in stat:
+                match = re.match(str_pattern_cd, stat)
             else:
                 match = re.match(str_pattern, stat)
 
@@ -106,3 +93,17 @@ class For_Stats:
 
 
 
+def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
+    window_capture = WindowCapture("MapleStory")
+    
+    def condition():
+        # Trigger screenshot
+        if cube_type == 'Red':
+            window_capture.locate_potential_RedCube()
+        elif cube_type == 'Black':
+            window_capture.locate_potential_BlackCube()
+        
+        OCR_result = Cube_image_reco.main()
+        return For_Stats(OCR_result, desired_stats).main()
+    
+    return condition

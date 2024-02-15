@@ -71,10 +71,10 @@ def main():
         
         if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
             item_category_Data_process.set_item_dict_value(selected_item, selected_stat, int(number))
-            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
+            display_str = item_category_Data_process.display_desired_stat_value(selected_item, selected_stat, int(number))
 
             set_display_windows.clear_text()
-            set_display_windows.insert_text(str(display_str))
+            set_display_windows.insert_text("Your desired stats is: "+"\n"+str(display_str))
         else:
             set_display_windows.clear_text()
             set_display_windows.insert_text("Please make a valid selection and enter a number.\n")
@@ -85,10 +85,12 @@ def main():
         
         if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
             
-            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
+            display_str = item_category_Data_process.display_desired_stat_value(selected_item, selected_stat, int(number))
             desired_stats_list.append(display_str)
             item_category_Data_process.clear_dict_value(selected_item,selected_stat)
-            display_windows.insert_text(str(display_str))
+            set_display_windows.clear_text()
+            display_windows.insert_text(str(display_str)+"\n")
+            
         else:
             display_windows.clear_text()
             display_windows.insert_text("Please make a valid selection and enter a number.\n")
@@ -119,7 +121,7 @@ def main():
     entry_box_frame.pack(fill='x', padx=10, pady=5)
 
     # Label
-    extry_box_label = CustomLabel(entry_box_frame, "Enter your stats value (For boss damage: 3 for 30%,35. 4 for 40%)")
+    extry_box_label = CustomLabel(entry_box_frame, "Enter your stats value:")
     extry_box_label.pack(side='left', padx=(0, 10))
 
     # Entry Box
