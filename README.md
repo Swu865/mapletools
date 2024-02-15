@@ -19,7 +19,6 @@ Before installing MapleTools, make sure you have the following software installe
 Both Python and Tesseract OCR should be added to the system's environment.
 
 ### Installation
-Follow these steps to get MapleTools up and running:
 
 1. Install Python and Tesseract OCR on your machine. Ensure they are added to the environment path.
 2. Clone the MapleTools repository or download the source code.
