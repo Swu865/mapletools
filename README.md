@@ -7,7 +7,7 @@ MapleTools is designed to assist Me and my friends, who have disabilities that a
 #### 1. AutoCubing
 Automatically resets the item's potential until it achieves your desired stats.
 
-#### 2. AutoPotion
+#### 2. AutoCrafting
 - **[Threads of Fate]**: Automatically Ask herb/mineral packs.
 - **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.
 
