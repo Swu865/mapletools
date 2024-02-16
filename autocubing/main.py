@@ -71,7 +71,7 @@ def main():
         
         if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
             item_category_Data_process.set_item_dict_value(selected_item, selected_stat, int(number))
-            display_str = item_category_Data_process.display_desired_stat_value(selected_item, selected_stat, int(number))
+            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
 
             set_display_windows.clear_text()
             set_display_windows.insert_text("Your desired stats is: "+"\n"+str(display_str))
@@ -85,11 +85,13 @@ def main():
         
         if selected_item != "Select Option" and selected_stat != "Select Option" and number.isdigit():
             
-            display_str = item_category_Data_process.display_desired_stat_value(selected_item, selected_stat, int(number))
+            display_str = item_category_Data_process.get_item_dict_value(selected_item, selected_stat, int(number))
             desired_stats_list.append(display_str)
             item_category_Data_process.clear_dict_value(selected_item,selected_stat)
             set_display_windows.clear_text()
             display_windows.insert_text(str(display_str)+"\n")
+
+            
             
         else:
             display_windows.clear_text()
