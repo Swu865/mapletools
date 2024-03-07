@@ -40,6 +40,7 @@ class For_Stats:
         self.OCR_stats = OCR_stats
         self.DESIRED_stats = DESIRED_stats
 
+
     def parse_OCR_result(self) -> dict[str, int]:
         Stats_dict = {}
         str_pattern = r"([a-zA-Z\s]+): \+(\d+)%"               # match common stats end with %

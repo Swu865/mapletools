@@ -32,6 +32,8 @@ def main():
         run_button.configure(text="Start", command=autocubing_toggle)
 
     def autocubing_toggle():
+        if not select_cube.get():
+            messagebox.showwarning("Warning", "Im sorry windark")
         if not desired_stats_list:
             messagebox.showwarning("Warning", "Please add at least one stat value before starting.")
         
