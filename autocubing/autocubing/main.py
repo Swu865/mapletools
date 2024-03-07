@@ -43,7 +43,7 @@ class For_Stats:
 
     def parse_OCR_result(self) -> dict[str, int]:
         Stats_dict = {}
-        str_pattern = r"([a-zA-Z\s]+): \+(\d+)%"               # match common stats end with %
+        str_pattern = r"([a-zA-Z]+)\s*:?\s*\+?(\d+)%"               # match common stats end with %
         str_pattern_boss = r"([a-zA-Z\s]+): \+(\d+)"           #match boss damage
         str_pattern_cd = r"([a-zA-Z\s]+): \-(\d)"              #match skill cooldown
 
