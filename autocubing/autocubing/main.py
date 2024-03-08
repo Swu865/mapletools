@@ -69,7 +69,7 @@ class For_Stats:
 
     def check_stat(self, OCR_stats: dict[str, int]) -> bool:
         
-        applicable_stats = {"STR", "INT", "DEX", "LUK","All Stats"}  # Stats that can benefit from 'All Stats'
+        applicable_stats = {"STR", "INT", "DEX", "LUK"}  # Stats that can benefit from 'All Stats'
 
         for desired_stats in self.DESIRED_stats:
             print("desired_stats", desired_stats)
