@@ -4,6 +4,7 @@ import re
 from utils import WindowCapture, Cube_image_reco
 
 
+
 class AutoCubing:
     def __init__(self, stop_event=None, condition_callable=None):
         self.found = False
@@ -40,6 +41,9 @@ class For_Stats:
         self.OCR_stats = OCR_stats
         self.DESIRED_stats = DESIRED_stats
 
+    def normalize_text(self, text: str) -> str:
+        """ Normalize text to lower case and strip extra spaces. """
+        return text.strip().lower()
 
     def parse_OCR_result(self) -> dict[str, int]:
         Stats_dict = {}
@@ -50,36 +54,38 @@ class For_Stats:
         print("OCR stats list", self.OCR_stats)
 
         for stat in self.OCR_stats:
+            normalized_stat = self.normalize_text(stat)
+
             # Determine which pattern to use
-            if "Boss" in stat:
-                match = re.match(str_pattern_boss, stat)
-            elif "Skill" in stat:
-                match = re.match(str_pattern_cd, stat)
+            if "boss" in normalized_stat:
+                match = re.match(str_pattern_boss, normalized_stat)
+            elif "skill" in normalized_stat:
+                match = re.match(str_pattern_cd, normalized_stat)
             else:
-                match = re.match(str_pattern, stat)
+                match = re.match(str_pattern, normalized_stat)
 
             if match:
-                stat_name = match.group(1).strip()  # Strip to remove any leading/trailing spaces
+                stat_name = self.normalize_text(match.group(1))
                 stat_value = int(match.group(2))
                 Stats_dict[stat_name] = Stats_dict.get(stat_name, 0) + stat_value
 
         print("Stats_dict", Stats_dict)
         return Stats_dict
- 
 
     def check_stat(self, OCR_stats: dict[str, int]) -> bool:
         
-        applicable_stats = {"STR", "INT", "DEX", "LUK"}  # Stats that can benefit from 'All Stats'
+        applicable_stats = {"str", "int", "dex", "luk"}  # Stats that can benefit from 'All Stats'
 
         for desired_stats in self.DESIRED_stats:
             print("desired_stats", desired_stats)
 
             for stat_name, stat_threshold in desired_stats.items():
-                total_stat = OCR_stats.get(stat_name, 0)
+                normalized_stat_name = self.normalize_text(stat_name)
+                total_stat = OCR_stats.get(normalized_stat_name, 0)
 
                 # Add 'All Stats' value only if the stat is in the applicable list
-                if 'All Stats' in OCR_stats and stat_name in applicable_stats:
-                    total_stat += OCR_stats['All Stats']
+                if 'all stats' in OCR_stats and normalized_stat_name in applicable_stats:
+                    total_stat += OCR_stats['all stats']
 
                 if total_stat < stat_threshold:
                     break  # If any desired stat is not met, break and check the next set
@@ -87,6 +93,7 @@ class For_Stats:
                 return True  # Return True if all desired stats are met or exceeded
 
         return False  # Return False if none of the desired stats are met
+
     def main(self) -> bool:
         OCR_dict = self.parse_OCR_result()
         match_desired_stats = self.check_stat(OCR_dict)

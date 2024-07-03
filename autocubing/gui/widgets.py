@@ -29,7 +29,8 @@ class CustomOptionMenu(ttk.Frame):
 class CustomRadioButtons(ttk.Frame):
     def __init__(self, parent, options, update_callback=None):
         super().__init__(parent)
-        self.radio_var = tk.IntVar()
+        self.radio_var = tk.IntVar(value=1)  # 设置默认值为1，即第一个选项被默认选中
+        self.options = options
 
         if update_callback:
             self.radio_var.trace_add("write", update_callback)
@@ -40,6 +41,14 @@ class CustomRadioButtons(ttk.Frame):
 
     def get_value(self):
         return self.radio_var.get()
+
+    def get_selected_option(self):
+        # 根据选中的值返回对应的文本
+        index = self.radio_var.get() - 1  # 调整索引以适应列表的0开始的索引
+        if 0 <= index < len(self.options):
+            return self.options[index]
+        return None  # 如果没有选项被选中
+    
 
 class CustomCheckBoxes(ttk.Frame):
     def __init__(self, parent, options):
@@ -53,12 +62,15 @@ class CustomCheckBoxes(ttk.Frame):
     def get_checked_values(self):
         return {text: var.get() for text, var in self.check_vars.items()}
 
+    def get_checked_items(self):
+        # This method will return a list of options that are checked
+        return [text for text, var in self.check_vars.items() if var.get()]
 
 class CustomButton(ttk.Frame):
     def __init__(self, parent, text, command):
         super().__init__(parent)
         self.button = ttk.Button(self, text=text, command=command)
-        self.button.grid(row=0, column=0, pady=10, padx=(100, 0))
+        self.button.grid(row=0, column=0, pady=10)
     def get_button_text(self):
         return self.button.cget("text")
 

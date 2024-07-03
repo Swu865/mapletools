@@ -4,3 +4,4 @@ pygetwindow
 pyautogui
 opencv-python
 pynput
+python_Levenshtein

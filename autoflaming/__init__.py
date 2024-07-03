@@ -1,0 +1,1 @@
+from .autoflaming import run_auto_flaming,check_score

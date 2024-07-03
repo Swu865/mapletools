@@ -16,7 +16,7 @@ class WindowCapture:
         except IndexError:
             print(f"Window titled '{window_title}' not found")
             exit()
-    
+
     def take_screenshot(self, x_offset, y_offset, width, height, filename):
         x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
         x1 = x + w // 2 - x_offset
@@ -24,6 +24,9 @@ class WindowCapture:
         screenshot = pyautogui.screenshot(region=(x1, y1, width, height))
         screenshot.save(filename)
     
+    
+
+
     def locate_potential_RedCube(self):
         return self.take_screenshot(84, 57, 163, 43, 'screenshot.png')
 
