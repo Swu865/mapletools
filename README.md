@@ -1,15 +1,18 @@
 # MapleTools
 
-## A Comprehensive Tool for Maplers with Hand Disabilities
-MapleTools is designed to assist Me and my friends, who have disabilities that affect their hand movements.
+## A Comprehensive Tool for Maplers
+MapleTools is designed to assist my friends and me, as we are extremely lazy.
 
 ### Features
 #### 1. AutoCubing
 Automatically resets the item's potential until it achieves your desired stats.
 
-#### 2. AutoCrafting
+#### 2. AutoFalming
+Automatically resets the item's flame until it achieves your desired stats.
+
+#### 3. AutoCrafting
 - **[Threads of Fate]**: Automatically Ask herb/mineral packs.
-- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.
+~~- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.~~
 
 ### Prerequisites
 Before installing MapleTools, make sure you have the following software installed:
@@ -29,7 +32,7 @@ pip install -r requirements.txt
 python main.py
 
 ### Upcoming Features
-AutoFlaming
+~~AutoFlaming~~
 
 ### Support
 Figure out yourself.
