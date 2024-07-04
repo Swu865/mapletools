@@ -13,16 +13,23 @@ def run_autoflaming():
     script_path = os.path.join(os.path.dirname(__file__), 'autoflaming', 'main.py')
     Popen([sys.executable, script_path])
 
+def run_autoasking():
+    
+    script_path = os.path.join(os.path.dirname(__file__), 'autoasking', 'main.py')
+    Popen([sys.executable, script_path])
+
 root = tk.Tk()
 root.title('MapleTools')
 root.geometry('800x600')
 
 
-autocubing_button = tk.Button(root, text='Autocubing', command=run_autocubing)
+autocubing_button = tk.Button(root, text='Cubing', command=run_autocubing)
 autocubing_button.pack(fill='x', padx=20, pady=5)
 
-autocubing_button = tk.Button(root, text='Autoflaming', command=run_autoflaming)
-autocubing_button.pack(fill='x', padx=20, pady=7)
+autoflaming_button = tk.Button(root, text='Flaming', command=run_autoflaming)
+autoflaming_button.pack(fill='x', padx=20, pady=7)
 
+autoasking_button = tk.Button(root, text='Ask', command=run_autoasking)
+autoasking_button.pack(fill='x', padx=20, pady=7)
 
 root.mainloop()

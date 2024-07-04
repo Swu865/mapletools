@@ -67,7 +67,7 @@ def main():
     main_stat = CustomRadioButtons(root,["STR","DEX","INT","LUK"])
     
     main_stat.pack()
-    
+
      # select sub stats
     sub_stats_label = CustomLabel(root, "Select secondary stats:")
     sub_stats_label.pack()

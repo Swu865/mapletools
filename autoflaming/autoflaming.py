@@ -26,13 +26,13 @@ class WindowCapture:
     def game_screenshot(self):
         x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
         screenshot = pyautogui.screenshot(region=(x, y, w, h))
-        screenshot.save("assets/maplewindow.png") 
+        screenshot.save("autoflaming/assets/maplewindow.png") 
     
     def red_flame_window(self):
         while True:
-            game_screenshot = cv2.imread('assets/maplewindow.png')
-            template_tl = cv2.imread('assets/flame_tl.png', 0)  
-            template_br = cv2.imread('assets/flame_br.png', 0)  
+            game_screenshot = cv2.imread('autoflaming/assets/maplewindow.png')
+            template_tl = cv2.imread('autoflaming/assets/flame_tl.png', 0)  
+            template_br = cv2.imread('autoflaming/assets/flame_br.png', 0)  
             game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
            
             #template match
@@ -51,7 +51,7 @@ class WindowCapture:
 
             # take screenshot
             matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
-            cv2.imwrite('assets/red_flame_region.png', matched_region)
+            cv2.imwrite('autoflaming/assets/red_flame_region.png', matched_region)
             break
 
 class Image_Reco:
@@ -106,7 +106,7 @@ class DataPreprocessing:
 def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:float,all_coeffi:float):
     WindowCapture("MapleStory").game_screenshot()
     WindowCapture("MapleStory").red_flame_window()
-    OCR_list = Image_Reco.main('assets/red_flame_region.png')
+    OCR_list = Image_Reco.main('autoflaming/assets/red_flame_region.png')
     data_process = DataPreprocessing()
     data_process.update_OCR_stats(OCR_list)
     OCR_dict = data_process.get_OCR_stats_dict()

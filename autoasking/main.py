@@ -34,7 +34,13 @@ class WindowCapture:
         self.game_pos = (x, y)
         self.game_wh = (w,h)
         screenshot = pyautogui.screenshot(region=(x, y, w, h))
-        screenshot.save("assets/maplewindow.png")
+
+        base_dir = os.path.dirname(__file__)  # Get the directory of the current script
+        assets_dir = os.path.join(base_dir, 'assets')
+        if not os.path.exists(assets_dir):
+            os.makedirs(assets_dir)  # Create the directory if it does not exist
+        file_path = os.path.join(assets_dir, 'maplewindow.png')
+        screenshot.save(file_path)
         
 
     def get_template_coordinates(self, image_path, template_path):
@@ -49,8 +55,8 @@ class WindowCapture:
 
     def get_ask_and_lb_coordinates(self):
         self.game_screenshot()  # Take screenshot and save it
-        ask_coord = self.get_template_coordinates('assets/maplewindow.png', 'assets/ask.png')
-        lb_coord = self.get_template_coordinates('assets/maplewindow.png', 'assets/lightbulb.png')
+        ask_coord = self.get_template_coordinates('autoasking/assets/maplewindow.png', 'autoasking/assets/ask.png')
+        lb_coord = self.get_template_coordinates('autoasking/assets/maplewindow.png', 'autoasking/assets/lightbulb.png')
         return [ask_coord, lb_coord]
     
     def get_windows_coordinates(self):
@@ -83,18 +89,18 @@ class ActionController:
 
 def shutdown():
     try:
-        # Get the shutdown time from the Entry widget, converting it to an integer
+        
         time_in_hours = int(shutdown_time.get())
     except ValueError:
         print("Please enter a valid number")
-        return  # Exit the function if the conversion fails
+        return  
 
-    shutdown_command = f"shutdown /s /t {time_in_hours * 3600}"  # Converts hours to seconds
+    shutdown_command = f"shutdown /s /t {time_in_hours * 3600}"  
     subprocess.run(shutdown_command.split(), shell=True)
     print(f"Shutdown scheduled in {time_in_hours} hour(s).")
 
 def cancel_shutdown():
-    shutdown_command = "shutdown -a"  # Command to abort the scheduled shutdown
+    shutdown_command = "shutdown -a"  
     subprocess.run(shutdown_command.split(), shell=True)
 
 def run_autoasking():
@@ -133,36 +139,30 @@ def start_autoasking():
 
 def stop_autoasking():
     global running
-    running = False  # 用这个变量来停止循环
-
-def on_press(key):
-    if key == keyboard.Key.f12:
-        autocubing_toggle()
+    running = False  
 
 def main():
     root = tk.Tk()
     root.title("AutoAsking")
     root.geometry("800x600")
-
+    # start button
     start_button = CustomButton(root, "Start Asking", command=start_autoasking)
     start_button.grid(row=0, column=0)
-
+    # stop
     stop_button = CustomButton(root, "Stop Asking", command=stop_autoasking)
     stop_button.grid(row=1, column=0)
 
-
-
+    #pc shutdown
     shutdown_lable = CustomLabel(root,"PC Shutdown in (hours):")
     shutdown_lable.grid(row=2, column=0, padx=10, pady=10)
     global shutdown_time
     shutdown_time = tk.Entry(root)
     shutdown_time.grid(row=2, column=1, padx=10, pady=10)
     shutdown_time.insert(0,3)
-    
-
     pc_shutdown_button = CustomButton(root,"Shutdown PC ",shutdown)
     pc_shutdown_button.grid(row=2, column=2)
 
+    #cancel shutdown
     cancel_shutdown_button = CustomButton(root,"Cancel shutdown ",cancel_shutdown)
     cancel_shutdown_button.grid(row=3, column=0)
     root.mainloop()
