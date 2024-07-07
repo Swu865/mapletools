@@ -3,7 +3,7 @@
 ## A Comprehensive Tool for Maplers
 MapleTools is designed to assist my friends and me, as we are extremely lazy.
 
-### Features
+### Functions
 #### 1. AutoCubing
 Automatically resets the item's potential until it achieves your desired stats.
 
