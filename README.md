@@ -12,6 +12,7 @@ Automatically resets the item's flame until it achieves your desired stats.
 
 #### 3. AutoCrafting
 - **[Threads of Fate]**: Automatically Ask herb/mineral packs.
+- 
 ~~- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.~~
 
 ### Prerequisites
@@ -23,13 +24,9 @@ Both Python and Tesseract OCR should be added to the system's environment.
 
 ### Installation
 
-1. Install Python and Tesseract OCR on your machine. Ensure they are added to the environment path.
-2. Clone the MapleTools repository or download the source code.
-3. Navigate to the MapleTools directory in your terminal or command prompt.
-4. Install the required dependencies by running:
-pip install -r requirements.txt
-5. Start the tool with:
-python main.py
+- cd MapleTools
+- pip install -r requirements.txt
+- python main.py
 
 ### Upcoming 
 ~~AutoFlaming~~
