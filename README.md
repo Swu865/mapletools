@@ -12,7 +12,7 @@ Automatically resets the item's flame until it achieves your desired stats.
 
 #### 3. AutoCrafting
 - **[Threads of Fate]**: Automatically Ask herb/mineral packs.
-- 
+  
 ~~- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.~~
 
 ### Prerequisites
