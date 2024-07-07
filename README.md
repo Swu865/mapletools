@@ -33,6 +33,10 @@ python main.py
 
 ### Upcoming Features
 ~~AutoFlaming~~
+.....
+
+### TO DO
+Code Refactoring
 
 ### Support
 Figure out yourself.
