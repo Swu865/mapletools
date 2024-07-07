@@ -31,7 +31,7 @@ pip install -r requirements.txt
 5. Start the tool with:
 python main.py
 
-### Upcoming Features
+### Upcoming 
 ~~AutoFlaming~~
 .....
 
