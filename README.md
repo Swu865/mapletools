@@ -1,3 +1,5 @@
+# **This project is no longer usable due to NGS updated.  **
+
 # MapleTools
 
 ## A Comprehensive Tool for Maplers
@@ -39,4 +41,4 @@ Code Refactoring
 Figure out yourself.
 
 ---
-This game ruined my life, so im gonna ruin this game.
+
