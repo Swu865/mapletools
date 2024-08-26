@@ -17,28 +17,71 @@ class WindowCapture:
             print(f"Window titled '{window_title}' not found")
             exit()
 
-    def take_screenshot(self, x_offset, y_offset, width, height, filename):
-        x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
-        x1 = x + w // 2 - x_offset
-        y1 = y + h // 2 + y_offset
-        screenshot = pyautogui.screenshot(region=(x1, y1, width, height))
-        screenshot.save(filename)
-    
-    
-
 
     def locate_potential_RedCube(self):
-        return self.take_screenshot(84, 57, 163, 43, 'screenshot.png')
+        x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
+        screenshot = pyautogui.screenshot(region=(x, y, w, h))
+        screenshot.save("autocubing/assets/maplewindow.png") 
+        
+        game_screenshot = cv2.imread('autocubing/assets/maplewindow.png')
+        template_tl = cv2.imread('autocubing/assets/red_tl.png', 0)  
+        template_br = cv2.imread('autocubing/assets/cube_br.png', 0)  
+        game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
+        
+        #template match
+        res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
+        res_br = cv2.matchTemplate(game_gray, template_br, cv2.TM_CCOEFF_NORMED)
+
+        
+        min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
+        min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
+        top_left = max_loc_tl
+        bottom_right = (max_loc_br[0] + template_br.shape[1], max_loc_br[1] + template_br.shape[0])
+
+        
+        top_left1 = (top_left[0],top_left[1]+36)
+        bottom_right1 = (bottom_right[0],bottom_right[1]-20)
+
+        # take screenshot
+        matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
+        cv2.imwrite('autocubing/assets/screenshot.png', matched_region)
 
     def locate_potential_BlackCube(self):
-        return self.take_screenshot(84, 57+49, 163, 43, 'screenshot.png')
+        x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
+        screenshot = pyautogui.screenshot(region=(x, y, w, h))
+        screenshot.save("autocubing/assets/maplewindow.png") 
+        
+        game_screenshot = cv2.imread('autocubing/assets/maplewindow.png')
+        template_tl = cv2.imread('autocubing/assets/black_tl.png', 0)  
+        template_br = cv2.imread('autocubing/assets/cube_br.png', 0)  
+        game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
+        
+        #template match
+        res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
+        res_br = cv2.matchTemplate(game_gray, template_br, cv2.TM_CCOEFF_NORMED)
+
+        
+        min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
+        min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
+        top_left = max_loc_tl
+        bottom_right = (max_loc_br[0] + template_br.shape[1], max_loc_br[1] + template_br.shape[0])
+
+        # add x,y offets to approach the stats rect
+        top_left1 = (top_left[0],top_left[1]+36)
+        bottom_right1 = (bottom_right[0],bottom_right[1]-20)
+
+        # take screenshot
+        matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
+        cv2.imwrite('autocubing/assets/screenshot.png', matched_region)
+
+
 
 
 class Cube_image_reco:
     def __init__(self):
         pass
     def main():
-        image =cv2.imread('screenshot.png')
+        image =cv2.imread('autocubing/assets/screenshot.png')
         scale_factor = 4
         enlarged_image = cv2.resize(image, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
         gray = cv2.cvtColor(enlarged_image, cv2.COLOR_BGR2GRAY)

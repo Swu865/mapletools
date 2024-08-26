@@ -29,6 +29,8 @@ class AutoCubing:
                 time.sleep(0.050)
                 pyautogui.press('enter')
                 time.sleep(0.050)
+                pyautogui.press('enter')
+                time.sleep(0.050)
             else:
                 print("found")
                 break
@@ -102,7 +104,7 @@ class For_Stats:
 
 
 def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
-    window_capture = WindowCapture("MapleStory")
+    window_capture = WindowCapture("Remote Desktop Connection")
     
     def condition():
         # Trigger screenshot
