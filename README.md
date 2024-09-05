@@ -1,4 +1,5 @@
-# **This project is no longer usable due to NGS updated.  **
+# **This project is no longer compatible with MapleStory devices due to an NGS update. Please consider using a remote device to mirror your game.**
+
 
 # MapleTools
 
