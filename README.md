@@ -1,4 +1,5 @@
-# **This project is no longer usable due to NGS updated.  **
+# **This project is no longer compatible with MapleStory devices due to an NGS update. Please consider using a remote device to mirror your game.**
+
 
 # MapleTools
 
@@ -12,8 +13,8 @@ Automatically resets the item's potential until it achieves your desired stats.
 #### 2. AutoFalming
 Automatically resets the item's flame until it achieves your desired stats.
 
-#### 3. AutoCrafting
-- **[Threads of Fate]**: Automatically Ask herb/mineral packs.
+~~#### 3. AutoCrafting~~
+~~- **[Threads of Fate]**: Automatically Ask herb/mineral packs.~~
   
 ~~- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.~~
 
@@ -36,9 +37,6 @@ Both Python and Tesseract OCR should be added to the system's environment.
 
 ### TO DO
 Code Refactoring
-
-### Support
-Figure out yourself.
 
 ---
 
