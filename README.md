@@ -19,15 +19,14 @@ Automatically resets the item's flame until it achieves your desired stats.
 ~~- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.~~
 
 ### Prerequisites
-Before installing MapleTools, make sure you have the following software installed:
+Make sure you have the following software installed:
 - Python (version 3.12)
 - Tesseract OCR (version 5.3.3)
 
-Both Python and Tesseract OCR should be added to the system's environment.
+Both Python and Tesseract OCR should be added to environment path.
 
 ### Installation
 
-- cd MapleTools
 - pip install -r requirements.txt
 - python main.py
 
@@ -36,7 +35,7 @@ Both Python and Tesseract OCR should be added to the system's environment.
 .....
 
 ### TO DO
-Code Refactoring
+Code Refactoring ... or maybe not
 
 ---
 
