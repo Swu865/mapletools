@@ -2,6 +2,7 @@ import threading
 import tkinter as tk
 from tkinter import ttk, scrolledtext,messagebox
 from pynput import keyboard 
+import pygetwindow as gw
 from autocubing.main import AutoCubing,create_condition_callable
 from utils import DataPreprocessing
 from gui.components import SelectCube,SelectItem 
@@ -15,7 +16,7 @@ def main():
     
     def start_autocubing():
         global stop_event, autocubing_thread
-        condition = create_condition_callable(desired_stats_list, select_cube.get())
+        condition = create_condition_callable(desired_stats_list, select_cube.get(),rdp_window.get())
 
         stop_event = threading.Event()
         stop_event.clear()
@@ -99,18 +100,30 @@ def main():
             display_windows.clear_text()
             display_windows.insert_text("Please make a valid selection and enter a number.\n")
 
+    # find rdp windows list 
+    def filter_windows():
+        all_windows = gw.getAllTitles()
+        filtered_windows = [title for title in all_windows if any(keyword in title for keyword in ["Remote Desktop Connection", "远程"])]
+        return filtered_windows
 
 
     root = tk.Tk()
     root.title("AutoCubing")
     root.geometry("800x600")
+
+    
+    rdp_windows = filter_windows()
+    rdp_window = SelectItem(root, "select RDP window",rdp_windows)
+    rdp_window.pack(fill='x', padx=10, pady=5)
     
     # Choose red or black cube
     select_cube = SelectCube(root)
     select_cube.pack(fill='x', padx=10, pady=5)
     
     # Data processing instance
-    item_category_Data_process = DataPreprocessing("Autocubing/resources/item_category.txt")
+    item_category_Data_process = DataPreprocessing("Autocubing/assets/item_category.txt")
+
+
 
     # Choose the item you want to cubing
     item_name_list = item_category_Data_process.get_item_name_list()

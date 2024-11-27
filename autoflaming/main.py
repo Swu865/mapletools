@@ -3,11 +3,14 @@ import tkinter as tk
 from tkinter import ttk
 import sys
 import os
+import pygetwindow as gw
+
 # Calculate the relative path to the 'widgets.py'
 script_dir = os.path.dirname(__file__)  # Get the directory where the script is running
 relative_path = os.path.join(script_dir, '../autocubing/gui')
 sys.path.append(relative_path)
 from widgets import *
+
 from pynput import keyboard 
 from autoflaming import create_condition_callable,Autoflaming
 
@@ -28,8 +31,8 @@ def main():
     def start_autoflaming():
         global stop_event, autoflaming_thread
         
-        desired_stat_dict = {"main":main_stat.get_selected_option(),"sub":sub_stats.get_checked_items(),"attack":att_matt.get_selected_option(),"all":"All Stats"}
-        condition = create_condition_callable(float(desired_flame_entry.get()),desired_stat_dict,float(desired_sub_entry.get()),float(desired_att_entry.get()),float(desired_alls_entry.get()))
+        desired_stat_dict = {"main":main_stat.get_selected_option(),"sub":sub_stats.get_checked_items(),"attack":att_matt.get_selected_option(),"all":"All Stats","HP":"MaxHP","MP":"MaxMP"}
+        condition = create_condition_callable(float(desired_flame_entry.get()),desired_stat_dict,float(desired_sub_entry.get()),float(desired_att_entry.get()),float(desired_alls_entry.get()),float(desired_HP_entry.get()),float(desired_MP_entry.get()),str(rdp_window.get()))
 
         stop_event = threading.Event()
         stop_event.clear()
@@ -56,10 +59,21 @@ def main():
             run_button.configure(text="Start", command=autoflaming_toggle)
             stop_autoflaming()
 
+    # find rdp windows list 
+    def filter_windows():
+        all_windows = gw.getAllTitles()
+        filtered_windows = [title for title in all_windows if any(keyword in title for keyword in ["Remote Desktop Connection", "远程"])]
+        return filtered_windows
+
+
 
     root = tk.Tk()
     root.title("Autoflaming")
     root.geometry("800x600")
+
+    rdp_windows = filter_windows()
+    rdp_window = SelectItem(root, "select RDP window",rdp_windows)
+    rdp_window.pack(fill='x', padx=10, pady=5)
 
     # select main stats
     main_stat_label = CustomLabel(root, "Select main stats:")
@@ -113,6 +127,20 @@ def main():
     desired_alls_entry = tk.Entry(entry_box_frame1)
     desired_alls_entry.insert(0,10)
     desired_alls_entry.pack(side='left', padx=(0, 10))
+
+    #desired HP
+    desired_HP_label = CustomLabel(entry_box_frame1, "Enter your HP coefficient::")
+    desired_HP_label.pack(side='left', padx=(0, 10))
+    desired_HP_entry = tk.Entry(entry_box_frame1)
+    desired_HP_entry.insert(0,280)
+    desired_HP_entry.pack(side='left', padx=(0, 10))
+
+    #desired MP
+    desired_MP_label = CustomLabel(entry_box_frame1, "Enter your MP coefficient::")
+    desired_MP_label.pack(side='left', padx=(2, 10))
+    desired_MP_entry = tk.Entry(entry_box_frame1)
+    desired_MP_entry.insert(0,280)
+    desired_MP_entry.pack(side='left', padx=(2, 10))       
 
     #button start
     run_button = ttk.Button(root,text="Start",command=autoflaming_toggle)

@@ -103,8 +103,8 @@ class For_Stats:
 
 
 
-def create_condition_callable(desired_stats: dict[str, int], cube_type: str):
-    window_capture = WindowCapture("Remote Desktop Connection")
+def create_condition_callable(desired_stats: dict[str, int], cube_type: str,window_name:str):
+    window_capture = WindowCapture(window_name)
     
     def condition():
         # Trigger screenshot

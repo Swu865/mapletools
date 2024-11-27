@@ -59,9 +59,11 @@ class Image_Reco:
         pass
     def main(filename):
         image =cv2.imread(filename)
-        scale_factor = 4
-        enlarged_image = cv2.resize(image, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
+        scale_factor = 2
+        enlarged_image = cv2.resize(image, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_CUBIC)
+
         gray = cv2.cvtColor(enlarged_image, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite('autoflaming/assets/red_flame_region.png', gray)
         text = pytesseract.image_to_string(gray)
         text = text.replace(",", "").replace(".", "")
         OCR_result = text.split("\n")
@@ -71,7 +73,7 @@ class Image_Reco:
 
 class DataPreprocessing:
     def __init__(self):
-        self.stats_dict = {"STR": 0, "DEX": 0, "INT": 0, "LUK": 0, "All Stats": 0,"Attack Power":0,"Magic Attack":0}
+        self.stats_dict = {"STR": 0, "DEX": 0, "INT": 0, "LUK": 0, "All Stats": 0,"Attack Power":0,"Magic Attack":0,"MaxHP":0,"MaxMP":0}
 
     def update_OCR_stats(self, item_list):
 
@@ -79,6 +81,9 @@ class DataPreprocessing:
         
 
         for item in item_list:
+
+
+
 
             match = re.search(r"([a-zA-Z\s]+)\s*:? \+(\d+)%?", item)
             if not match:
@@ -103,9 +108,9 @@ class DataPreprocessing:
     def get_OCR_stats_dict(self):
         return self.stats_dict
 
-def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:float,all_coeffi:float):
-    WindowCapture("MapleStory").game_screenshot()
-    WindowCapture("MapleStory").red_flame_window()
+def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:float,all_coeffi:float,hp_coeffi:float,mp_coeffi:float,window_name:str):
+    WindowCapture(window_name).game_screenshot()
+    WindowCapture(window_name).red_flame_window()
     OCR_list = Image_Reco.main('autoflaming/assets/red_flame_region.png')
     data_process = DataPreprocessing()
     data_process.update_OCR_stats(OCR_list)
@@ -142,6 +147,10 @@ def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:flo
                     # all的值乘以10
                     filtered_stats[keys] *= all_coeffi
                 
+                elif category == 'HP':
+                    filtered_stats[keys] *= (1/hp_coeffi)
+                elif category == 'MP':
+                    filtered_stats[keys] *= (1/mp_coeffi)                    
 
     
     total_value = sum(filtered_stats.values())
@@ -154,10 +163,10 @@ def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:flo
     print("desired score",desired_score)
     return desired_score<rounded_total
     
-def create_condition_callable(desired_score,desired_dict,sub,att,alls):
+def create_condition_callable(desired_score,desired_dict,sub,att,alls,hp,mp,window_name):
 
     def condition():
-        return check_score(desired_score,desired_dict,sub,att,alls)
+        return check_score(desired_score,desired_dict,sub,att,alls,hp,mp,window_name)
     return condition
 
 

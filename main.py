@@ -3,6 +3,8 @@ from subprocess import Popen
 import sys
 import os
 
+
+
 def run_autocubing():
 
     script_path = os.path.join(os.path.dirname(__file__), 'Autocubing', 'main.py')
