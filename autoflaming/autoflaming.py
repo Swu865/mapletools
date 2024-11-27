@@ -1,10 +1,8 @@
 import cv2
-import numpy as np
 import pyautogui
 import pygetwindow as gw
 import pytesseract
 import re
-import ast
 from Levenshtein import ratio
 import time
 
@@ -133,18 +131,18 @@ def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:flo
             for key in keys:
                 
                 if key in filtered_stats:
-                    # sub的值乘以0.1
+                    # sub*0.1
                     filtered_stats[key] *= sub_coeffi
         else:
             if keys in filtered_stats:
                 if category == 'main':
-                    # main的值乘以1
+                    # main*1
                     filtered_stats[keys] *= 1
                 elif category == 'attack':
-                    # attack的值乘以3
+                    # attack*3
                     filtered_stats[keys] *= att_coeffi
                 elif category == 'all':
-                    # all的值乘以10
+                    # all*10
                     filtered_stats[keys] *= all_coeffi
                 
                 elif category == 'HP':
