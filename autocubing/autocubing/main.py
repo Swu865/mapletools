@@ -22,20 +22,20 @@ class AutoCubing:
             self.check_condition()
             if not self.found:
                 pyautogui.click()
-                time.sleep(0.050)
+                time.sleep(0.20)
                 pyautogui.press('enter')
-                time.sleep(0.050)
+                time.sleep(0.20)
                 pyautogui.press('enter')
-                time.sleep(0.050)
+                time.sleep(0.20)
                 pyautogui.press('enter')
-                time.sleep(0.050)
+                time.sleep(0.20)
                 pyautogui.press('enter')
-                time.sleep(0.050)
+                time.sleep(0.20)
             else:
                 print("found")
                 break
 
-            time.sleep(2)  
+            time.sleep(2.5)  
 
 
 class For_Stats:

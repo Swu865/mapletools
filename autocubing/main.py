@@ -103,7 +103,7 @@ def main():
     # find rdp windows list 
     def filter_windows():
         all_windows = gw.getAllTitles()
-        filtered_windows = [title for title in all_windows if any(keyword in title for keyword in ["Remote Desktop Connection", "远程"])]
+        filtered_windows = [title for title in all_windows if any(keyword in title for keyword in ["Remote Desktop Connection", "远程","Google"])]
         return filtered_windows
 
 

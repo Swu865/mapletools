@@ -6,7 +6,7 @@ def filter_windows(keywords):
     return filtered_windows
 
 # Specify keywords to look for in window titles
-keywords = ["Remote Desktop Connection", "远程"]
+keywords = ["Remote Desktop Connection", "远程","Google"]
 filtered_titles = filter_windows(keywords)
 
 print(filtered_titles)

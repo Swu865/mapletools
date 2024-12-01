@@ -46,34 +46,41 @@ class WindowCapture:
         matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
         cv2.imwrite('autocubing/assets/screenshot.png', matched_region)
 
+
+
     def locate_potential_BlackCube(self):
         x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
         screenshot = pyautogui.screenshot(region=(x, y, w, h))
         screenshot.save("autocubing/assets/maplewindow.png") 
-        
+
         game_screenshot = cv2.imread('autocubing/assets/maplewindow.png')
-        template_tl = cv2.imread('autocubing/assets/black_tl.png', 0)  
-        template_br = cv2.imread('autocubing/assets/cube_br.png', 0)  
+        template_tl = cv2.imread(   'autocubing/assets/black_tl.png', 0)
+        template_br = cv2.imread('autocubing/assets/cube_br.png', 0)
         game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
-        
+
+
         #template match
-        res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
-        res_br = cv2.matchTemplate(game_gray, template_br, cv2.TM_CCOEFF_NORMED)
+        while True:
+            res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
+            min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
+            top_left = max_loc_tl
 
-        
-        min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
-        min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
-        top_left = max_loc_tl
-        bottom_right = (max_loc_br[0] + template_br.shape[1], max_loc_br[1] + template_br.shape[0])
+            res_br = cv2.matchTemplate(game_gray[top_left[1]:, :], template_br, cv2.TM_CCOEFF_NORMED)
+            min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
+            bottom_right = (
+                max_loc_br[0] + template_br.shape[1],
+                max_loc_br[1] + template_br.shape[0] + top_left[1]
+            )
 
-        # add x,y offets to approach the stats rect
-        top_left1 = (top_left[0],top_left[1]+36)
-        bottom_right1 = (bottom_right[0],bottom_right[1]-20)
+            # add x,y offets to approach the stats rect
+            top_left1 = (top_left[0], top_left[1]+36)
+            bottom_right1 = (bottom_right[0], bottom_right[1] - 20)
+            # take screenshot
+            matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
+            if len(matched_region) != 0:
+                break
 
-        # take screenshot
-        matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
         cv2.imwrite('autocubing/assets/screenshot.png', matched_region)
-
 
 
 
