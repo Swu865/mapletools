@@ -13,8 +13,9 @@ Automatically resets the item's potential until it achieves your desired stats.
 #### 2. AutoFalming
 Automatically resets the item's flame until it achieves your desired stats.
 
-Crafting system has been updated; this function is no longer needed.
-~~#### 3. AutoCrafting~~
+
+
+~~#### 3. AutoCrafting~~Crafting system has been updated; this function is no longer needed.
 ~~- **[Threads of Fate]**: Automatically Ask herb/mineral packs.~~
   
 ~~- **Potion Crafting**: Automatically crafts wealth acquisition potions or any other potion of your choice.~~
