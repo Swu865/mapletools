@@ -3,7 +3,7 @@ import pyautogui
 import re
 from utils import WindowCapture, Cube_image_reco
 
-
+global mouse_cursor = ()
 
 class AutoCubing:
     def __init__(self, stop_event=None, condition_callable=None):
@@ -17,10 +17,12 @@ class AutoCubing:
             self.found = self.condition_callable()
             
     def main(self):
+        global mouse_cursor
         while not self.stop_event.is_set():
             print("Loop running, stop_event is set:", self.stop_event.is_set())
             self.check_condition()
             if not self.found:
+                pyautogui.moveTo(mouse_cursor[0], mouse_cursor[1])
                 pyautogui.click()
                 time.sleep(0.20)
                 pyautogui.press('enter')
@@ -110,9 +112,10 @@ def create_condition_callable(desired_stats: dict[str, int], cube_type: str,wind
         # Trigger screenshot
         if cube_type == 'Red':
             window_capture.locate_potential_RedCube()
+            mouse_cursor = window_capture.get_cursor_coor()
         elif cube_type == 'Black':
             window_capture.locate_potential_BlackCube()
-        
+            mouse_cursor = window_capture.get_cursor_coor()
         OCR_result = Cube_image_reco.main()
         return For_Stats(OCR_result, desired_stats).main()
     

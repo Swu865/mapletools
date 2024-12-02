@@ -7,8 +7,9 @@ import ast
 
 class WindowCapture:
     def __init__(self, window_title):
+
         self.window = self.locate_window(window_title)
-    
+        self.cursor_coor = ()
     def locate_window(self, window_title):
         try:
             window = gw.getWindowsWithTitle(window_title)[0]
@@ -27,26 +28,35 @@ class WindowCapture:
         template_tl = cv2.imread('autocubing/assets/red_tl.png', 0)  
         template_br = cv2.imread('autocubing/assets/cube_br.png', 0)  
         game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
-        
-        #template match
-        res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
-        res_br = cv2.matchTemplate(game_gray, template_br, cv2.TM_CCOEFF_NORMED)
+        while True:
+            #template match
+            res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
+            res_br = cv2.matchTemplate(game_gray, template_br, cv2.TM_CCOEFF_NORMED)
 
-        
-        min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
-        min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
-        top_left = max_loc_tl
-        bottom_right = (max_loc_br[0] + template_br.shape[1], max_loc_br[1] + template_br.shape[0])
+            
+            min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
+            min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
+            top_left = max_loc_tl
+            bottom_right = (max_loc_br[0] + template_br.shape[1], max_loc_br[1] + template_br.shape[0])
 
-        
-        top_left1 = (top_left[0],top_left[1]+36)
-        bottom_right1 = (bottom_right[0],bottom_right[1]-20)
+            
+            top_left1 = (top_left[0],top_left[1]+36)
+            bottom_right1 = (bottom_right[0],bottom_right[1]-20)
 
-        # take screenshot
-        matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
+            #calculate one more try coordinate
+            cursor_x = (top_left[0]+bottom_right[0])//2
+            cursor_y = (bottom_right[1]+20)
+            one_more_try_coor = (cursor_x,cursor_y)
+            #update 
+            self.update_cursor_coor(one_more_try_coor)
+
+            # take screenshot
+            matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
+            if len(matched_region) !=0:
+                break
         cv2.imwrite('autocubing/assets/screenshot.png', matched_region)
 
-
+        
 
     def locate_potential_BlackCube(self):
         x, y, w, h = self.window.left, self.window.top, self.window.width, self.window.height
@@ -57,7 +67,6 @@ class WindowCapture:
         template_tl = cv2.imread(   'autocubing/assets/black_tl.png', 0)
         template_br = cv2.imread('autocubing/assets/cube_br.png', 0)
         game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
-
 
         #template match
         while True:
@@ -75,12 +84,31 @@ class WindowCapture:
             # add x,y offets to approach the stats rect
             top_left1 = (top_left[0], top_left[1]+36)
             bottom_right1 = (bottom_right[0], bottom_right[1] - 20)
+
+            #calculate one more try coordinate
+            cursor_x = (top_left[0]+bottom_right[0])//2
+            cursor_y = (bottom_right[1]+20)
+            one_more_try_coor = (cursor_x,cursor_y)
+            #update 
+            self.update_cursor_coor(one_more_try_coor)
+            
             # take screenshot
             matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
             if len(matched_region) != 0:
                 break
 
+
         cv2.imwrite('autocubing/assets/screenshot.png', matched_region)
+    
+    def update_cursor_coor(self, new_value):
+
+        self.cursor_coor = new_value
+
+
+    def get_cursor_coor(self):
+
+        return self.cursor_coor
+        
 
 
 
