@@ -6,12 +6,12 @@ import re
 from Levenshtein import ratio
 import time
 
-
+mouse_cursor = ()
 
 class WindowCapture:
     def __init__(self, window_title):
         self.window = self.locate_window(window_title)
-    
+        self.cursor_coor = ()
     def locate_window(self, window_title):
         try:
             window = gw.getWindowsWithTitle(window_title)[0]
@@ -47,10 +47,27 @@ class WindowCapture:
             top_left1 = (top_left[0],top_left[1]+20)
             bottom_right1 = (bottom_right[0],bottom_right[1]-20)
 
+            cursor_x = (top_left[0]+bottom_right[0])//2
+            cursor_y = (bottom_right[1]+20)
+            one_more_try_coor = (cursor_x+self.window.left,cursor_y+self.window.top)
+
+            #update 
+            self.update_cursor_coor(one_more_try_coor)
+
             # take screenshot
             matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
-            cv2.imwrite('autoflaming/assets/red_flame_region.png', matched_region)
-            break
+            if len(matched_region) !=0:
+                break
+        cv2.imwrite('autoflaming/assets/red_flame_region.png', matched_region)
+
+    def update_cursor_coor(self, new_value):
+
+        self.cursor_coor = new_value
+
+
+    def get_cursor_coor(self):
+
+        return self.cursor_coor
 
 class Image_Reco:
     def __init__(self):
@@ -107,6 +124,7 @@ class DataPreprocessing:
         return self.stats_dict
 
 def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:float,all_coeffi:float,hp_coeffi:float,mp_coeffi:float,window_name:str):
+    global mouse_cursor
     WindowCapture(window_name).game_screenshot()
     WindowCapture(window_name).red_flame_window()
     OCR_list = Image_Reco.main('autoflaming/assets/red_flame_region.png')
@@ -150,7 +168,7 @@ def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:flo
                 elif category == 'MP':
                     filtered_stats[keys] *= (1/mp_coeffi)                    
 
-    
+    mouse_cursor = WindowCapture(window_name).get_cursor_coor()
     total_value = sum(filtered_stats.values())
     rounded_total = round(total_value)
     print("----------------")
@@ -180,10 +198,13 @@ class Autoflaming:
             self.found = self.condition_callable()
             
     def main(self):
+        global mouse_cursor
         while not self.stop_event.is_set():
             
             self.check_condition()
+
             if not self.found:
+                pyautogui.moveTo(mouse_cursor)
                 pyautogui.click()
                 time.sleep(0.10)
                 pyautogui.press('enter')

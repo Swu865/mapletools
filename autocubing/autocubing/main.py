@@ -1,9 +1,10 @@
 import time
 import pyautogui
 import re
+import random
 from utils import WindowCapture, Cube_image_reco
 
-global mouse_cursor = ()
+mouse_cursor = ()
 
 class AutoCubing:
     def __init__(self, stop_event=None, condition_callable=None):
@@ -22,22 +23,23 @@ class AutoCubing:
             print("Loop running, stop_event is set:", self.stop_event.is_set())
             self.check_condition()
             if not self.found:
-                pyautogui.moveTo(mouse_cursor[0], mouse_cursor[1])
+
+                pyautogui.moveTo(mouse_cursor)
                 pyautogui.click()
-                time.sleep(0.20)
+                time.sleep(0.10)
                 pyautogui.press('enter')
-                time.sleep(0.20)
+                time.sleep(0.07)
                 pyautogui.press('enter')
-                time.sleep(0.20)
+                time.sleep(0.10)
                 pyautogui.press('enter')
-                time.sleep(0.20)
+                time.sleep(0.05)
                 pyautogui.press('enter')
-                time.sleep(0.20)
+                time.sleep(0.10)
             else:
                 print("found")
                 break
 
-            time.sleep(2.5)  
+            time.sleep(random.randint(3, 4))  
 
 
 class For_Stats:
@@ -106,16 +108,20 @@ class For_Stats:
 
 
 def create_condition_callable(desired_stats: dict[str, int], cube_type: str,window_name:str):
+    global mouse_cursor
     window_capture = WindowCapture(window_name)
     
     def condition():
+        global mouse_cursor
         # Trigger screenshot
         if cube_type == 'Red':
             window_capture.locate_potential_RedCube()
             mouse_cursor = window_capture.get_cursor_coor()
+
         elif cube_type == 'Black':
             window_capture.locate_potential_BlackCube()
             mouse_cursor = window_capture.get_cursor_coor()
+ 
         OCR_result = Cube_image_reco.main()
         return For_Stats(OCR_result, desired_stats).main()
     

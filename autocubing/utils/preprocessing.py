@@ -46,9 +46,11 @@ class WindowCapture:
             #calculate one more try coordinate
             cursor_x = (top_left[0]+bottom_right[0])//2
             cursor_y = (bottom_right[1]+20)
-            one_more_try_coor = (cursor_x,cursor_y)
+            one_more_try_coor = (cursor_x+x,cursor_y+y)
+            print(one_more_try_coor)
             #update 
             self.update_cursor_coor(one_more_try_coor)
+
 
             # take screenshot
             matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
@@ -88,7 +90,7 @@ class WindowCapture:
             #calculate one more try coordinate
             cursor_x = (top_left[0]+bottom_right[0])//2
             cursor_y = (bottom_right[1]+20)
-            one_more_try_coor = (cursor_x,cursor_y)
+            one_more_try_coor = (cursor_x+x,cursor_y+y)
             #update 
             self.update_cursor_coor(one_more_try_coor)
             
