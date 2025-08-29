@@ -1,0 +1,16 @@
+VALID_KEYS = [
+    "Magic ATT: +12%",
+    "Magic ATT: +9%",
+    "Magic ATT: +10%",
+    "Magic ATT: +13%",
+    "Attack Power: +9%",
+    "Attack Power: +10%",
+    "Attack Power: +12%",
+    "Attack Power: +13%",
+    "Boss Damage: +35%",
+    "Boss Damage: +30%",
+    "Boss Damage: +40%",
+    "Ignore Defense: +40%",
+    "Ignore Defense: +30%",
+    "Ignore Defense: +35%"
+]

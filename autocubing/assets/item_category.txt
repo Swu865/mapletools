@@ -1,5 +1,5 @@
-WeaponAndSecondary:{'Magic ATT':0,'ATT':0,'Boss Monster Damage':0}
-Emblem:{'Magic ATT':0,'ATT':0,'ignore Monster DEF':0}
+WeaponAndSecondary:{'Magic ATT':0,'Attack Power':0,'Boss Monster Damage':0}
+Emblem:{'Magic ATT':0,'Attack Power':0,'Ignore Defense':0}
 Hat:{'Skill Cooldown':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
 Gloves:{'Critical Damage':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}
 Accessory:{'Item Drop Rate':0,'Mesos Obtained':0,'STR':0,'DEX':0,'INT':0,'LUK':0,'All Stats':0}

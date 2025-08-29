@@ -184,19 +184,22 @@ class Autoflaming:
             
             self.check_condition()
             if not self.found:
+                time.sleep(0.2)
                 pyautogui.click()
-                time.sleep(0.10)
+                time.sleep(0.2)
                 pyautogui.press('enter')
-                time.sleep(0.10)
+                time.sleep(0.20)
                 pyautogui.press('enter')
-                time.sleep(0.10)
+                time.sleep(0.20)
                 pyautogui.press('enter')
-                time.sleep(0.10)
+                time.sleep(0.20)
+                pyautogui.press('enter')
+                time.sleep(0.20)
             else:
                 print("found",self.found )
                 break
 
-            time.sleep(3)  
+            time.sleep(2)  
 
 
 
