@@ -1,5 +1,3 @@
-# **This project is no longer compatible with MapleStory running devices due to NGS update. Please consider using another device to remote to your game.**
-
 
 # MapleTools
 
