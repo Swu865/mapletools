@@ -42,7 +42,7 @@ VALID_KEYS = ["Skill Cooldown: -2","Skill Cooldown: -1",'Magic ATT: +12%', 'Magi
 
 def match_valid_key(input_str: str, threshold=80) -> str | None:
     # ignore the strings without %      
-    if not re.search(r'[\+\-]\d+%$', input_str) and "Skill Cooldown" not in input_str:
+    if not (re.search(r'[+-]\d+%$', input_str) or "Skill Cooldown" in input_str):
         return "pass"
 
     match, score, _ = process.extractOne(input_str, VALID_KEYS, scorer=fuzz.ratio)
