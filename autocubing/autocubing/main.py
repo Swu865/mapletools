@@ -37,12 +37,12 @@ class AutoCubing:
 
             time.sleep(3)  
 
-VALID_KEYS = ["Skill Cooldown: -2","Skill Cooldown: -1",'Magic ATT: +12%', 'Magic ATT: +9%', 'Magic ATT: +10%', 'Magic ATT: +13%', 'Attack Power: +9%', 'Attack Power: +10%', 'Attack Power: +12%', 'Attack Power: +13%', 'Boss Damage: +35%', 'Boss Damage: +30%', 'Boss Damage: +40%', 'Ignore Defense: +40%', 'Ignore Defense: +30%', 'Ignore Defense: +35%', 'STR: +9%', 'STR: +10%', 'STR: +12%', 'STR: +13%', 'DEX: +9%', 'DEX: +10%', 'DEX: +12%', 'DEX: +13%', 'INT: +9%', 'INT: +10%', 'INT: +12%', 'INT: +13%', 'LUK: +9%', 'LUK: +10%', 'LUK: +12%', 'LUK: +13%', 'All Stats: +9%', 'All Stats: +10%', 'All Stats: +6%', 'All Stats: +7%', 'Item Drop Rate: +20%', 'Mesos Obtained: +20%', 'Critical Damage: +8%']
+VALID_KEYS = ["Skill Cooldown: -2 sec","Skill Cooldown: -1 sec",'Magic ATT: +12%', 'Magic ATT: +9%', 'Magic ATT: +10%', 'Magic ATT: +13%', 'Attack Power: +9%', 'Attack Power: +10%', 'Attack Power: +12%', 'Attack Power: +13%', 'Boss Damage: +35%', 'Boss Damage: +30%', 'Boss Damage: +40%', 'Ignore Defense: +40%', 'Ignore Defense: +30%', 'Ignore Defense: +35%', 'STR: +9%', 'STR: +10%', 'STR: +12%', 'STR: +13%', 'DEX: +9%', 'DEX: +10%', 'DEX: +12%', 'DEX: +13%', 'INT: +9%', 'INT: +10%', 'INT: +12%', 'INT: +13%', 'LUK: +9%', 'LUK: +10%', 'LUK: +12%', 'LUK: +13%', 'All Stats: +9%', 'All Stats: +10%', 'All Stats: +6%', 'All Stats: +7%', 'Item Drop Rate: +20%', 'Mesos Obtained: +20%', 'Critical Damage: +8%']
 
 
 def match_valid_key(input_str: str, threshold=80) -> str | None:
     # ignore the strings without %      
-    if not (re.search(r'[+-]\d+%$', input_str) or "Skill Cooldown" in input_str):
+    if not (re.search(r'[+-]\d+%$', input_str) or "Skill Cooldown:" in input_str):
         return "pass"
 
     match, score, _ = process.extractOne(input_str, VALID_KEYS, scorer=fuzz.ratio)
