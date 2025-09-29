@@ -132,14 +132,14 @@ def main():
     desired_HP_label = CustomLabel(entry_box_frame1, "Enter your HP coefficient::")
     desired_HP_label.pack(side='left', padx=(0, 10))
     desired_HP_entry = tk.Entry(entry_box_frame1)
-    desired_HP_entry.insert(0,280)
+    desired_HP_entry.insert(0,28000)
     desired_HP_entry.pack(side='left', padx=(0, 10))
 
     #desired MP
     desired_MP_label = CustomLabel(entry_box_frame1, "Enter your MP coefficient::")
     desired_MP_label.pack(side='left', padx=(2, 10))
     desired_MP_entry = tk.Entry(entry_box_frame1)
-    desired_MP_entry.insert(0,280)
+    desired_MP_entry.insert(0,28000)
     desired_MP_entry.pack(side='left', padx=(2, 10))       
 
     #button start

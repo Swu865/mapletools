@@ -29,61 +29,83 @@ class WindowCapture:
     def red_flame_window(self):
         while True:
             game_screenshot = cv2.imread('autoflaming/assets/maplewindow.png')
-            template_tl = cv2.imread('autoflaming/assets/flame_tl.png', 0)  
-            template_br = cv2.imread('autoflaming/assets/flame_br.png', 0)  
+            template_tl = cv2.imread('autoflaming/assets/test.png', 0)  
+
+
+
             game_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BGR2GRAY)
            
             #template match
             res_tl = cv2.matchTemplate(game_gray, template_tl, cv2.TM_CCOEFF_NORMED)
-            res_br = cv2.matchTemplate(game_gray, template_br, cv2.TM_CCOEFF_NORMED)
+
 
             # find frame position
             min_val_tl, max_val_tl, min_loc_tl, max_loc_tl = cv2.minMaxLoc(res_tl)
-            min_val_br, max_val_br, min_loc_br, max_loc_br = cv2.minMaxLoc(res_br)
+
             top_left = max_loc_tl
-            bottom_right = (max_loc_br[0] + template_br.shape[1], max_loc_br[1] + template_br.shape[0])
+
 
             # add x,y offets to approach the stats rect
-            top_left1 = (top_left[0],top_left[1]+20)
-            bottom_right1 = (bottom_right[0],bottom_right[1]-20)
+            top_left1 = (top_left[0]+79, top_left[1] + 295)       
+            bottom_right = (top_left[0] + 216, top_left1[1] + 120)
 
+            top_left_n = (bottom_right[0],top_left1[1])
+            bottom_right_n = (bottom_right[0]+40,bottom_right[1])
             # take screenshot
-            matched_region = game_screenshot[top_left1[1]:bottom_right1[1], top_left1[0]:bottom_right1[0]]
-            cv2.imwrite('autoflaming/assets/red_flame_region.png', matched_region)
+            matched_text_region = game_screenshot[top_left1[1]:bottom_right[1], top_left1[0]:bottom_right[0]]
+            matched_number_region = game_screenshot[top_left_n[1]:bottom_right_n[1], top_left_n[0]:bottom_right_n[0]]
+            cv2.imwrite('autoflaming/assets/red_flame_text_region.png', matched_text_region)
+            cv2.imwrite('autoflaming/assets/red_flame_number_region.png', matched_number_region)
             break
 
 class Image_Reco:
     def __init__(self):
         pass
-    def main(filename):
-        image =cv2.imread(filename)
-        scale_factor = 2
-        enlarged_image = cv2.resize(image, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_CUBIC)
 
-        gray = cv2.cvtColor(enlarged_image, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite('autoflaming/assets/red_flame_region.png', gray)
-        text = pytesseract.image_to_string(gray)
-        text = text.replace(",", "").replace(".", "")
-        OCR_result = text.split("\n")
-        while "" in OCR_result:
-            OCR_result.remove("")
-        return OCR_result
+    def main(text_filename, number_filename):
+        scale_factor = 2
+
+        # 处理文本图
+        image_t = cv2.imread(text_filename)
+        enlarged_image_t = cv2.resize(image_t, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_CUBIC)
+        gray_t = cv2.cvtColor(enlarged_image_t, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite('autoflaming/assets/red_flame_region_text.png', gray_t)
+        text_t = pytesseract.image_to_string(gray_t)
+        OCR_result_t = [line.strip() for line in text_t.split("\n") if line.strip()]
+
+        # 处理数值图
+        image_n = cv2.imread(number_filename)
+        enlarged_image_n = cv2.resize(image_n, None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
+        gray_n = cv2.cvtColor(enlarged_image_n, cv2.COLOR_BGR2GRAY)
+        _, thresh = cv2.threshold(gray_n, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        cv2.imwrite('autoflaming/assets/red_flame_region_num.png', thresh)
+        text_n = pytesseract.image_to_string(thresh)
+        OCR_result_n = [line.strip() for line in text_n.split("\n") if line.strip()]
+
+        print(OCR_result_t, "← text")
+        print(OCR_result_n, "← number")
+
+        # 合并
+        merged = []
+        min_len = min(len(OCR_result_t), len(OCR_result_n))
+        for i in range(min_len):
+            merged.append(OCR_result_t[i] + " " + OCR_result_n[i])
+
+        return merged
 
 class DataPreprocessing:
     def __init__(self):
         self.stats_dict = {"STR": 0, "DEX": 0, "INT": 0, "LUK": 0, "All Stats": 0,"Attack Power":0,"Magic Attack":0,"MaxHP":0,"MaxMP":0}
 
     def update_OCR_stats(self, item_list):
-
+        print(item_list,"data prep")
         fuzzy_keys = {key: key.replace(" ", "") for key in self.stats_dict.keys()}
         
 
         for item in item_list:
 
 
-
-
-            match = re.search(r"([a-zA-Z\s]+)\s*:? \+(\d+)%?", item)
+            match = re.search(r"([a-zA-Z\s]+)\s*\+(\d+)%?", item)  
             if not match:
                 continue
 
@@ -109,7 +131,7 @@ class DataPreprocessing:
 def check_score(desired_score,desired_stats:dict,sub_coeffi:float,att_coeffi:float,all_coeffi:float,hp_coeffi:float,mp_coeffi:float,window_name:str):
     WindowCapture(window_name).game_screenshot()
     WindowCapture(window_name).red_flame_window()
-    OCR_list = Image_Reco.main('autoflaming/assets/red_flame_region.png')
+    OCR_list = Image_Reco.main('autoflaming/assets/red_flame_text_region.png','autoflaming/assets/red_flame_number_region.png')
     data_process = DataPreprocessing()
     data_process.update_OCR_stats(OCR_list)
     OCR_dict = data_process.get_OCR_stats_dict()
@@ -199,16 +221,10 @@ class Autoflaming:
                 print("found",self.found )
                 break
 
-            time.sleep(2)  
+            time.sleep(4)  
 
 
 
-
-# condition = create_condition_callable(115,{"main":"STR","sub":["DEX","LUK"],"attack":"Attack Power","all":"All Stats"},0.1,3,10)
-
-
-# autoflaming = Autoflaming(condition)
-# autoflaming.main()
 
 
 

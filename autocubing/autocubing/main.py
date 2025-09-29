@@ -32,6 +32,7 @@ class AutoCubing:
                 pyautogui.press('enter')
                 time.sleep(0.1)
             else:
+                
                 print("found")
                 break
 
