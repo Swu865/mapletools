@@ -62,7 +62,7 @@ class WindowCapture:
 
 
         # add x,y offets to approach the stats rect
-        top_left1 = (top_left[0]+153,top_left[1]+172)
+        top_left1 = (top_left[0]+171,top_left[1]+172)
         bottom_right = (top_left[0] + 341, top_left[1] + 251)
 
         # take screenshot
