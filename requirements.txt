@@ -6,4 +6,3 @@ opencv-python
 pynput
 python_Levenshtein
 rapidfuzz
-playsound

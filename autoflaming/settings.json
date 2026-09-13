@@ -1,0 +1,16 @@
+{
+  "main": 3,
+  "attack": 2,
+  "combat_stop": true,
+  "window": "maple - Remote Desktop Connection",
+  "sub_STR": false,
+  "sub_DEX": false,
+  "sub_INT": false,
+  "sub_LUK": true,
+  "score": "200",
+  "sub_weight": "0.08",
+  "attack_weight": "2.4",
+  "all_weight": "13",
+  "hp_weight": "28000",
+  "mp_weight": "28000"
+}
